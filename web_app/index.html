@@ -1,232 +1,124 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Black Roulette</title>
+    <title>Virus Roulette</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
         
         body {
-            background: #0a0a0a;
-            color: #fff;
-            font-family: 'Arial', sans-serif;
+            background: #000000;
+            color: #ffffff;
+            font-family: 'Segoe UI', Arial, sans-serif;
             overflow: hidden;
             height: 100vh;
+            user-select: none;
         }
         
-        .container {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 15px;
+        .app {
             height: 100vh;
             display: flex;
             flex-direction: column;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            background: #0a0a0a;
         }
         
-        /* ШАПКА */
+        /* HEADER */
         .header {
-            text-align: center;
-            margin-bottom: 20px;
-            padding: 20px;
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            border-radius: 20px;
-            border: 2px solid #333;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+            padding: 15px 20px;
+            border-bottom: 1px solid #333;
+            position: relative;
         }
         
-        .game-title {
-            font-size: 28px;
-            font-weight: bold;
-            background: linear-gradient(45deg, #FFD700, #FFA500, #FFD700);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
-            text-shadow: 0 0 10px rgba(255,215,0,0.3);
+        .user-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .user-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffffff;
         }
         
         .balance {
-            font-size: 20px;
-            color: #FFD700;
-            font-weight: bold;
-        }
-        
-        /* СТАТУС БАР */
-        .status-bar {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-            padding: 12px;
-            background: #1a1a1a;
-            border-radius: 15px;
-            border: 1px solid #333;
-        }
-        
-        .status-item {
-            text-align: center;
-            flex: 1;
-        }
-        
-        .status-value {
-            color: #00ff00;
+            background: linear-gradient(45deg, #8B4513, #A0522D);
+            padding: 8px 15px;
+            border-radius: 20px;
             font-weight: bold;
             font-size: 16px;
+            box-shadow: 0 2px 10px rgba(139, 69, 19, 0.3);
         }
         
-        /* ОСНОВНЫЕ КНОПКИ */
-        .btn-grid {
+        /* MAIN CONTENT */
+        .content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        /* STATS GRID */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 15px 10px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #FFD700;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #888;
+            font-weight: 500;
+        }
+        
+        /* MAIN BUTTONS */
+        .main-buttons {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
+            gap: 12px;
+            margin-bottom: 25px;
         }
         
-        .btn {
+        .main-btn {
             background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
-            border: 2px solid #444;
+            border: 1px solid #444;
             border-radius: 15px;
             padding: 20px 15px;
             color: white;
             font-size: 14px;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
+            transition: all 0.2s ease;
             position: relative;
-            overflow: hidden;
         }
         
-        .btn:hover {
+        .main-btn:active {
+            transform: scale(0.98);
             background: linear-gradient(135deg, #3d3d3d 0%, #2a2a2a 100%);
-            border-color: #666;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
         
-        .btn-primary {
-            background: linear-gradient(135deg, #8B4513 0%, #654321 100%);
-            border-color: #A0522D;
-            font-size: 18px;
-            grid-column: 1 / -1;
-            padding: 25px;
-            font-weight: bold;
-        }
-        
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #9C5513 0%, #765431 100%);
-            border-color: #B5651D;
-        }
-        
-        /* РУЛЕТКА */
-        .roulette-section {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            border-radius: 20px;
-            padding: 25px;
-            border: 2px solid #333;
-            margin-bottom: 20px;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-        
-        .roulette-title {
-            font-size: 22px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            background: linear-gradient(45deg, #FFD700, #FFA500);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .free-spin {
-            color: #00ff00;
-            font-size: 16px;
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
-        
-        .spin-timer {
-            color: #ff4444;
-            font-size: 14px;
-            margin-top: 10px;
-        }
-        
-        /* КОНКУРСЫ */
-        .contests-section {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            border-radius: 20px;
-            padding: 20px;
-            border: 2px solid #333;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        
-        .contest-badge {
-            background: linear-gradient(45deg, #ff0000, #ff4444);
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            display: inline-block;
-            margin-bottom: 15px;
-        }
-        
-        /* НИЖНЕЕ МЕНЮ */
-        .bottom-nav {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr;
-            gap: 10px;
-            margin-top: auto;
-            background: #1a1a1a;
-            border-radius: 20px;
-            padding: 15px;
-            border: 2px solid #333;
-        }
-        
-        .nav-btn {
-            background: #2d2d2d;
-            border: none;
-            border-radius: 12px;
-            padding: 12px 5px;
-            color: #ccc;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: bold;
-        }
-        
-        .nav-btn.active {
-            background: linear-gradient(135deg, #8B4513 0%, #654321 100%);
-            color: white;
-            box-shadow: 0 2px 10px rgba(139,69,19,0.3);
-        }
-        
-        /* УВЕДОМЛЕНИЕ */
-        .notification {
-            position: fixed;
-            top: -60px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            color: white;
-            padding: 15px 30px;
-            border-radius: 25px;
-            font-weight: bold;
-            border: 2px solid #444;
-            z-index: 1000;
-            transition: top 0.5s ease-in-out;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-        }
-        
-        .notification.show {
-            top: 20px;
-        }
-        
-        .icon {
+        .btn-icon {
             font-size: 24px;
             margin-bottom: 8px;
         }
@@ -244,85 +136,300 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            font-weight: bold;
+        }
+        
+        /* ROULETTE SECTION */
+        .roulette-card {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            border: 1px solid #333;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #FFD700;
+            text-align: center;
+        }
+        
+        .spin-info {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .free-spin {
+            color: #00ff00;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .timer {
+            color: #ff4444;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .spin-btn {
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+            border: none;
+            border-radius: 25px;
+            padding: 18px;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+        
+        .spin-btn:active {
+            transform: scale(0.95);
+            background: linear-gradient(135deg, #9C5513 0%, #B5651D 100%);
+        }
+        
+        /* CONTESTS */
+        .contests-card {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            border: 1px solid #333;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .contest-item {
+            background: #2d2d2d;
+            border: 1px solid #444;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .contest-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #ffffff;
+        }
+        
+        .contest-time {
+            color: #ff4444;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        /* BOTTOM NAV */
+        .bottom-nav {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            background: #1a1a1a;
+            border-top: 1px solid #333;
+            padding: 10px 0;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px 5px;
+            color: #888;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+        
+        .nav-item.active {
+            color: #FFD700;
+        }
+        
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+        
+        /* MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            border: 1px solid #333;
+            border-radius: 20px;
+            padding: 25px;
+            width: 90%;
+            max-width: 350px;
+            text-align: center;
+        }
+        
+        .modal-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #FFD700;
+        }
+        
+        .close-modal {
+            background: #8B4513;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 25px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-    <div class="notification" id="welcomeNotification">
-        🎯 Добро пожаловать, <span id="userName">Игрок</span>!
-    </div>
-
-    <div class="container">
-        <!-- ШАПКА -->
+    <div class="app">
+        <!-- HEADER -->
         <div class="header">
-            <div class="game-title">BLACK ROULETTE</div>
-            <div class="balance">💫 ЗВЁЗД: <span id="starsCount">1,247</span></div>
-        </div>
-        
-        <!-- СТАТУС БАР -->
-        <div class="status-bar">
-            <div class="status-item">
-                <div>👥 РЕФЕРАЛЫ</div>
-                <div class="status-value">82</div>
-            </div>
-            <div class="status-item">
-                <div>🎯 ВРАЩЕНИЙ</div>
-                <div class="status-value">156</div>
-            </div>
-            <div class="status-item">
-                <div>💰 ВЫИГРЫШ</div>
-                <div class="status-value">5,280</div>
+            <div class="user-info">
+                <div class="user-name" id="userName">Player</div>
+                <div class="balance">⭐ <span id="balance">1,247</span></div>
             </div>
         </div>
         
-        <!-- ОСНОВНЫЕ КНОПКИ -->
-        <div class="btn-grid">
-            <button class="btn" onclick="showSection('inventory')">
-                <div class="icon">🎒</div>
-                ИНВЕНТАРЬ
-            </button>
-            <button class="btn" onclick="showSection('referral')">
-                <div class="icon">👥</div>
-                РЕФЕРАЛЫ
-                <div class="badge">3</div>
-            </button>
-            <button class="btn" onclick="showSection('leaderboard')">
-                <div class="icon">🏆</div>
-                ТОП ИГРОКОВ
-            </button>
-            <button class="btn" onclick="showSection('shop')">
-                <div class="icon">🛒</div>
-                МАГАЗИН
-                <div class="badge">1</div>
-            </button>
+        <!-- MAIN CONTENT -->
+        <div class="content">
+            <!-- STATS -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">82</div>
+                    <div class="stat-label">РЕФЕРАЛЫ</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">156</div>
+                    <div class="stat-label">ВРАЩЕНИЙ</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">5,280</div>
+                    <div class="stat-label">ВЫИГРЫШ</div>
+                </div>
+            </div>
+            
+            <!-- MAIN BUTTONS -->
+            <div class="main-buttons">
+                <button class="main-btn" onclick="openModal('inventory')">
+                    <div class="btn-icon">🎒</div>
+                    ИНВЕНТАРЬ
+                </button>
+                <button class="main-btn" onclick="openModal('referral')">
+                    <div class="btn-icon">👥</div>
+                    РЕФЕРАЛЫ
+                    <div class="badge">3</div>
+                </button>
+                <button class="main-btn" onclick="openModal('leaderboard')">
+                    <div class="btn-icon">🏆</div>
+                    ТОП ИГРОКОВ
+                </button>
+                <button class="main-btn" onclick="openModal('shop')">
+                    <div class="btn-icon">🛒</div>
+                    МАГАЗИН
+                    <div class="badge">1</div>
+                </button>
+            </div>
+            
+            <!-- ROULETTE -->
+            <div class="roulette-card">
+                <div class="section-title">🎰 ЧЕРНАЯ РУЛЕТКА</div>
+                <div class="spin-info">
+                    <div class="free-spin">✨ БЕСПЛАТНОЕ ВРАЩЕНИЕ</div>
+                    <div class="timer">⏰ ЧЕРЕЗ: <span id="timer">19:43:25</span></div>
+                </div>
+                <button class="spin-btn" onclick="spinRoulette()">
+                    КРУТИТЬ РУЛЕТКУ
+                </button>
+            </div>
+            
+            <!-- CONTESTS -->
+            <div class="contests-card">
+                <div class="section-title">🎯 КОНКУРСЫ</div>
+                <div class="contest-item">
+                    <div class="contest-title">УЛУЧШЕНИЯ 🔥</div>
+                    <div class="contest-time">Награды через: 3ч 7м</div>
+                </div>
+                <div class="contest-item">
+                    <div class="contest-title">РЕФЕРАЛЬНАЯ ПРОГРАММА</div>
+                    <div class="contest-time">Постоянно</div>
+                </div>
+            </div>
         </div>
         
-        <!-- РУЛЕТКА -->
-        <div class="roulette-section">
-            <div class="roulette-title">🎰 ЧЕРНАЯ РУЛЕТКА</div>
-            <div class="free-spin">✨ БЕСПЛАТНОЕ ВРАЩЕНИЕ</div>
-            <div class="spin-timer">⏰ ЧЕРЕЗ: <span id="timer">19:43:25</span></div>
-            <button class="btn btn-primary" onclick="spinRoulette()">
-                КРУТИТЬ РУЛЕТКУ
-            </button>
-        </div>
-        
-        <!-- КОНКУРСЫ -->
-        <div class="contests-section">
-            <div class="roulette-title">🎯 КОНКУРСЫ</div>
-            <div class="contest-badge">НОВИНКА!</div>
-            <div style="color: #00ff00; margin-bottom: 15px; font-weight: bold;">УЛУЧШЕНИЯ ДОСТУПНЫ!</div>
-            <button class="btn" style="background: linear-gradient(135deg, #4d2d2d 0%, #3d1a1a 100%); border-color: #ff4444;">
-                🎁 ПОЛУЧИТЬ НАГРАДЫ ЧЕРЕЗ 3ч 7м
-            </button>
-        </div>
-        
-        <!-- НИЖНЕЕ МЕНЮ -->
+        <!-- BOTTOM NAVIGATION -->
         <div class="bottom-nav">
-            <button class="nav-btn active">🏠 Главная</button>
-            <button class="nav-btn">📋 Задания</button>
-            <button class="nav-btn">🎰 Рулетка</button>
-            <button class="nav-btn">🛒 Магазин</button>
+            <div class="nav-item active" onclick="changeTab('home')">
+                <div class="nav-icon">🏠</div>
+                Главная
+            </div>
+            <div class="nav-item" onclick="changeTab('tasks')">
+                <div class="nav-icon">📋</div>
+                Задания
+            </div>
+            <div class="nav-item" onclick="changeTab('roulette')">
+                <div class="nav-icon">🎰</div>
+                Рулетка
+            </div>
+            <div class="nav-item" onclick="changeTab('shop')">
+                <div class="nav-icon">🛒</div>
+                Магазин
+            </div>
+        </div>
+    </div>
+    
+    <!-- MODALS -->
+    <div class="modal" id="inventoryModal">
+        <div class="modal-content">
+            <div class="modal-title">🎒 ИНВЕНТАРЬ</div>
+            <p>Здесь будут ваши предметы и бонусы</p>
+            <button class="close-modal" onclick="closeModal('inventoryModal')">ЗАКРЫТЬ</button>
+        </div>
+    </div>
+    
+    <div class="modal" id="referralModal">
+        <div class="modal-content">
+            <div class="modal-title">👥 РЕФЕРАЛЫ</div>
+            <p>Приглашайте друзей и получайте бонусы!</p>
+            <button class="close-modal" onclick="closeModal('referralModal')">ЗАКРЫТЬ</button>
+        </div>
+    </div>
+    
+    <div class="modal" id="leaderboardModal">
+        <div class="modal-content">
+            <div class="modal-title">🏆 ТОП ИГРОКОВ</div>
+            <p>Таблица лидеров</p>
+            <button class="close-modal" onclick="closeModal('leaderboardModal')">ЗАКРЫТЬ</button>
+        </div>
+    </div>
+    
+    <div class="modal" id="shopModal">
+        <div class="modal-content">
+            <div class="modal-title">🛒 МАГАЗИН</div>
+            <p>Покупки за звёзды</p>
+            <button class="close-modal" onclick="closeModal('shopModal')">ЗАКРЫТЬ</button>
+        </div>
+    </div>
+    
+    <div class="modal" id="spinModal">
+        <div class="modal-content">
+            <div class="modal-title">🎰 РЕЗУЛЬТАТ</div>
+            <p id="spinResult">Вы выиграли 10 звёзд! 🎉</p>
+            <button class="close-modal" onclick="closeModal('spinModal')">OK</button>
         </div>
     </div>
 
@@ -331,38 +438,60 @@
         tg.expand();
         tg.BackButton.hide();
         
-        // Имя пользователя
-        const userName = tg.initDataUnsafe.user?.first_name || 'Игрок';
-        document.getElementById('userName').textContent = userName;
+        // User data
+        const user = tg.initDataUnsafe.user;
+        document.getElementById('userName').textContent = user?.first_name || 'Игрок';
         
-        // Плавное уведомление
-        setTimeout(() => {
-            document.getElementById('welcomeNotification').classList.add('show');
-        }, 500);
+        // Working functions
+        function changeTab(tab) {
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            event.target.classList.add('active');
+            // Здесь можно добавить логику смены контента
+        }
         
-        // Таймер обратного отсчёта
+        function openModal(modalType) {
+            const modal = document.getElementById(modalType + 'Modal');
+            if (modal) modal.style.display = 'flex';
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        function spinRoulette() {
+            const prizes = [
+                { text: "Вы выиграли 5 звёзд! ⭐", amount: 5 },
+                { text: "Вы выиграли 10 звёзд! ✨", amount: 10 },
+                { text: "Вы выиграли 20 звёзд! 🎉", amount: 20 },
+                { text: "К сожалению, вы ничего не выиграли 😔", amount: 0 }
+            ];
+            
+            const result = prizes[Math.floor(Math.random() * prizes.length)];
+            document.getElementById('spinResult').textContent = result.text;
+            
+            // Update balance
+            if (result.amount > 0) {
+                const currentBalance = parseInt(document.getElementById('balance').textContent.replace(',', ''));
+                document.getElementById('balance').textContent = (currentBalance + result.amount).toLocaleString();
+            }
+            
+            openModal('spin');
+        }
+        
+        // Timer simulation
         function updateTimer() {
             const timer = document.getElementById('timer');
-            // Здесь будет логика таймера
+            // Здесь можно добавить реальный таймер
         }
         
-        // Функции
-        function spinRoulette() {
-            alert('🎰 Рулетка запускается!');
-            // Здесь будет логика рулетки
-        }
-        
-        function showSection(section) {
-            alert('Открывается раздел: ' + section);
-        }
-        
-        // Скрыть уведомление через 3 секунды
-        setTimeout(() => {
-            document.getElementById('welcomeNotification').classList.remove('show');
-        }, 3000);
-        
-        // Обновлять таймер каждую секунду
         setInterval(updateTimer, 1000);
+        
+        // Close modal on outside click
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
     </script>
 </body>
 </html>
