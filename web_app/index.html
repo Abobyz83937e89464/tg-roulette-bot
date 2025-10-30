@@ -9,6 +9,7 @@
             padding: 0;
             font-family: Arial, sans-serif;
             overflow: hidden;
+            background: #000;
         }
         
         .screen {
@@ -27,6 +28,7 @@
             cursor: pointer;
             border: none;
             background: none;
+            padding: 0;
         }
         
         #enterBtn {
@@ -44,32 +46,64 @@
             left: 50%;
             transform: translateX(-50%);
         }
+        
+        .welcome-notification {
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: top 0.5s ease-in-out;
+            z-index: 1000;
+        }
+        
+        .notification-show {
+            top: 20px;
+        }
+        
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
     </style>
 </head>
 <body>
     <!-- ЭКРАН ПРИВЕТСТВИЯ -->
     <div class="screen" id="welcomeScreen">
-        <img src="https://drive.google.com/uc?export=view&id=1ZIg6E-c6hqH7DyoNvLAJ-jbjmSdCOrCs/PruvetstyleOzahode/greetings.jpg" 
-             style="width:100%; height:100%; object-fit:cover;">
+        <img src="https://ibb.co/7xdMhpMR" alt="Приветствие">
+        
+        <div class="welcome-notification" id="welcomeNotification">
+            🎯 Добро пожаловать, <span id="userName">Игрок</span>!
+        </div>
+        
         <button class="btn" id="enterBtn">
-            <img src="https://drive.google.com/uc?export=view&id=1ZIg6E-c6hqH7DyoNvLAJ-jbjmSdCOrCs/Buttons/sunset.jpg" 
-                 style="width:100%; height:100%;">
+            <img src="https://ibb.co/cHRJKBt" alt="Войти">
         </button>
     </div>
 
     <!-- ГЛАВНЫЙ ЭКРАН -->
     <div class="screen" id="mainScreen">
-        <img src="https://drive.google.com/uc?export=view&id=1ZIg6E-c6hqH7DyoNvLAJ-jbjmSdCOrCs/GLAVNufon/Fon.jpg" 
-             style="width:100%; height:100%; object-fit:cover;">
+        <img src="https://ibb.co/4ZkSxWK9" alt="Главный фон">
+        
         <button class="btn" id="rouletteBtn">
-            <img src="https://drive.google.com/uc?export=view&id=1ZIg6E-c6hqH7DyoNvLAJ-jbjmSdCOrCs/Ruletkabuttons/Ruletka.jpg" 
-                 style="width:100%; height:100%;">
+            <img src="https://ibb.co/0yb80BWw" alt="Крутить рулетку">
         </button>
     </div>
 
     <script>
         let tg = window.Telegram.WebApp;
         tg.expand();
+        
+        // Плавное уведомление при загрузке
+        setTimeout(() => {
+            const notification = document.getElementById('welcomeNotification');
+            notification.classList.add('notification-show');
+        }, 500);
         
         // Переход с приветствия на главный экран
         document.getElementById('enterBtn').addEventListener('click', function() {
