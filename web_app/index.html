@@ -75,29 +75,33 @@
 <body>
     <!-- ЭКРАН ПРИВЕТСТВИЯ -->
     <div class="screen" id="welcomeScreen">
-        <img src="https://ibb.co/7xdMhpMR" alt="Приветствие">
+        <img src="https://files.catbox.moe/8pftpk.jpg" alt="Приветствие">
         
         <div class="welcome-notification" id="welcomeNotification">
             🎯 Добро пожаловать, <span id="userName">Игрок</span>!
         </div>
         
         <button class="btn" id="enterBtn">
-            <img src="https://ibb.co/cHRJKBt" alt="Войти">
+            <img src="https://files.catbox.moe/zls4ke.jpg" alt="Войти">
         </button>
     </div>
 
     <!-- ГЛАВНЫЙ ЭКРАН -->
     <div class="screen" id="mainScreen">
-        <img src="https://ibb.co/4ZkSxWK9" alt="Главный фон">
+        <img src="https://files.catbox.moe/uzi4ve.jpg" alt="Главный фон">
         
         <button class="btn" id="rouletteBtn">
-            <img src="https://ibb.co/0yb80BWw" alt="Крутить рулетку">
+            <img src="https://files.catbox.moe/xv5n6y.jpg" alt="Крутить рулетку">
         </button>
     </div>
 
     <script>
         let tg = window.Telegram.WebApp;
         tg.expand();
+        
+        // Получаем имя пользователя из Telegram
+        const userName = tg.initDataUnsafe.user?.first_name || 'Игрок';
+        document.getElementById('userName').textContent = userName;
         
         // Плавное уведомление при загрузке
         setTimeout(() => {
