@@ -6,7 +6,7 @@ import os
 
 # Конфигурация
 BOT_TOKEN = os.getenv('BOT_TOKEN', '8052679500:AAFxiWMPFBYzZBxpagvvZ_v0XYhHnf98Eow')
-WEB_APP_URL = os.getenv('WEB_APP_URL', 'https://your-username.github.io/tg-roulette-bot/web_app/')
+WEB_APP_URL = os.getenv('WEB_APP_URL', 'https://raw.githack.com/Abobyz83937e89464/tg-roulette-bot/main/web_app/index.html')
 
 # Инициализация БД
 def init_db():
@@ -128,10 +128,5 @@ if __name__ == '__main__':
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CallbackQueryHandler(button_handler))
     
-    port = int(os.environ.get('PORT', 5000))
-    application.run_webhook(
-        listen="0.0.0.0",
-        port=port,
-        url_path=BOT_TOKEN,
-        webhook_url=f"https://your-app-name.onrender.com/{BOT_TOKEN}"
-          )
+    # ДЛЯ RAILWAY - используем polling
+    application.run_polling()
