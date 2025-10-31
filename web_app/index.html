@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Virus Roulette</title>
+    <title>Black Roulette</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         * {
@@ -12,7 +12,7 @@
         }
         
         body {
-            background: #000000;
+            background: #0a0a0a;
             color: #ffffff;
             font-family: 'Segoe UI', Arial, sans-serif;
             overflow: hidden;
@@ -32,7 +32,6 @@
             background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
             padding: 15px 20px;
             border-bottom: 1px solid #333;
-            position: relative;
         }
         
         .user-info {
@@ -44,7 +43,6 @@
         .user-name {
             font-size: 18px;
             font-weight: 600;
-            color: #ffffff;
         }
         
         .balance {
@@ -53,7 +51,6 @@
             border-radius: 20px;
             font-weight: bold;
             font-size: 16px;
-            box-shadow: 0 2px 10px rgba(139, 69, 19, 0.3);
         }
         
         /* MAIN CONTENT */
@@ -63,163 +60,134 @@
             overflow-y: auto;
         }
         
-        /* STATS GRID */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 25px;
-        }
-        
-        .stat-card {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            border: 1px solid #333;
-            border-radius: 12px;
-            padding: 15px 10px;
-            text-align: center;
-        }
-        
-        .stat-value {
-            font-size: 20px;
-            font-weight: bold;
-            color: #FFD700;
-            margin-bottom: 5px;
-        }
-        
-        .stat-label {
-            font-size: 12px;
-            color: #888;
-            font-weight: 500;
-        }
-        
-        /* MAIN BUTTONS */
-        .main-buttons {
+        /* ROULETTE TABS */
+        .roulette-tabs {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 25px;
-        }
-        
-        .main-btn {
-            background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
-            border: 1px solid #444;
-            border-radius: 15px;
-            padding: 20px 15px;
-            color: white;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            position: relative;
-        }
-        
-        .main-btn:active {
-            transform: scale(0.98);
-            background: linear-gradient(135deg, #3d3d3d 0%, #2a2a2a 100%);
-        }
-        
-        .btn-icon {
-            font-size: 24px;
-            margin-bottom: 8px;
-        }
-        
-        .badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: #ff4444;
-            color: white;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-        
-        /* ROULETTE SECTION */
-        .roulette-card {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            border: 1px solid #333;
-            border-radius: 15px;
-            padding: 20px;
+            gap: 10px;
             margin-bottom: 20px;
         }
         
-        .section-title {
+        .tab-btn {
+            background: #2d2d2d;
+            border: 1px solid #444;
+            border-radius: 10px;
+            padding: 15px;
+            color: #888;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .tab-btn.active {
+            background: linear-gradient(135deg, #8B4513 0%, #654321 100%);
+            color: white;
+            border-color: #A0522D;
+        }
+        
+        /* ROULETTE CONTAINER */
+        .roulette-container {
+            position: relative;
+            margin-bottom: 30px;
+        }
+        
+        .wheel-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 0 auto 20px;
+        }
+        
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            position: relative;
+            transition: transform 4s cubic-bezier(0.2, 0.8, 0.3, 1);
+            border: 5px solid #333;
+        }
+        
+        .arrow {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 30px;
+            color: #ff4444;
+            z-index: 10;
+            text-shadow: 0 0 10px rgba(255,0,0,0.5);
+        }
+        
+        .sector {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            transform-origin: 100% 100%;
+            clip-path: polygon(100% 0, 0% 100%, 100% 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .sector-text {
+            transform: rotate(45deg);
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        }
+        
+        /* SPIN BUTTON */
+        .spin-btn {
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+            border: none;
+            border-radius: 25px;
+            padding: 20px;
+            color: white;
             font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 20px;
+            transition: all 0.2s ease;
+        }
+        
+        .spin-btn:active {
+            transform: scale(0.95);
+        }
+        
+        /* PROBABILITIES */
+        .probabilities {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 15px;
+            padding: 20px;
+        }
+        
+        .prob-title {
+            font-size: 18px;
             font-weight: bold;
             margin-bottom: 15px;
             color: #FFD700;
             text-align: center;
         }
         
-        .spin-info {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        
-        .free-spin {
-            color: #00ff00;
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-        
-        .timer {
-            color: #ff4444;
-            font-size: 14px;
-            font-weight: 500;
-        }
-        
-        .spin-btn {
-            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
-            border: none;
-            border-radius: 25px;
-            padding: 18px;
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.2s ease;
-        }
-        
-        .spin-btn:active {
-            transform: scale(0.95);
-            background: linear-gradient(135deg, #9C5513 0%, #B5651D 100%);
-        }
-        
-        /* CONTESTS */
-        .contests-card {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            border: 1px solid #333;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        
-        .contest-item {
+        .prob-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding: 8px;
             background: #2d2d2d;
-            border: 1px solid #444;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 10px;
+            border-radius: 8px;
         }
         
-        .contest-title {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 5px;
-            color: #ffffff;
-        }
-        
-        .contest-time {
-            color: #ff4444;
-            font-size: 14px;
+        .prob-name {
             font-weight: 500;
+        }
+        
+        .prob-chance {
+            color: #FFD700;
+            font-weight: bold;
         }
         
         /* BOTTOM NAV */
@@ -240,7 +208,6 @@
             font-size: 12px;
             font-weight: 500;
             cursor: pointer;
-            transition: color 0.2s ease;
         }
         
         .nav-item.active {
@@ -250,48 +217,6 @@
         .nav-icon {
             font-size: 20px;
             margin-bottom: 4px;
-        }
-        
-        /* MODAL */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .modal-content {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            border: 1px solid #333;
-            border-radius: 20px;
-            padding: 25px;
-            width: 90%;
-            max-width: 350px;
-            text-align: center;
-        }
-        
-        .modal-title {
-            font-size: 22px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: #FFD700;
-        }
-        
-        .close-modal {
-            background: #8B4513;
-            border: none;
-            border-radius: 10px;
-            padding: 12px 25px;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 20px;
         }
     </style>
 </head>
@@ -307,129 +232,102 @@
         
         <!-- MAIN CONTENT -->
         <div class="content">
-            <!-- STATS -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-value">82</div>
-                    <div class="stat-label">РЕФЕРАЛЫ</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">156</div>
-                    <div class="stat-label">ВРАЩЕНИЙ</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">5,280</div>
-                    <div class="stat-label">ВЫИГРЫШ</div>
-                </div>
-            </div>
-            
-            <!-- MAIN BUTTONS -->
-            <div class="main-buttons">
-                <button class="main-btn" onclick="openModal('inventory')">
-                    <div class="btn-icon">🎒</div>
-                    ИНВЕНТАРЬ
+            <!-- ROULETTE TABS -->
+            <div class="roulette-tabs">
+                <button class="tab-btn active" onclick="switchRoulette('stars')">
+                    ⭐ ЗВЁЗДЫ
                 </button>
-                <button class="main-btn" onclick="openModal('referral')">
-                    <div class="btn-icon">👥</div>
-                    РЕФЕРАЛЫ
-                    <div class="badge">3</div>
-                </button>
-                <button class="main-btn" onclick="openModal('leaderboard')">
-                    <div class="btn-icon">🏆</div>
-                    ТОП ИГРОКОВ
-                </button>
-                <button class="main-btn" onclick="openModal('shop')">
-                    <div class="btn-icon">🛒</div>
-                    МАГАЗИН
-                    <div class="badge">1</div>
+                <button class="tab-btn" onclick="switchRoulette('nft')">
+                    🎨 NFT
                 </button>
             </div>
             
-            <!-- ROULETTE -->
-            <div class="roulette-card">
-                <div class="section-title">🎰 ЧЕРНАЯ РУЛЕТКА</div>
-                <div class="spin-info">
-                    <div class="free-spin">✨ БЕСПЛАТНОЕ ВРАЩЕНИЕ</div>
-                    <div class="timer">⏰ ЧЕРЕЗ: <span id="timer">19:43:25</span></div>
+            <!-- STARS ROULETTE -->
+            <div class="roulette-container" id="starsRoulette">
+                <div class="wheel-container">
+                    <div class="arrow">▼</div>
+                    <div class="wheel" id="starsWheel"></div>
                 </div>
-                <button class="spin-btn" onclick="spinRoulette()">
-                    КРУТИТЬ РУЛЕТКУ
+                <button class="spin-btn" onclick="spinRoulette('stars')">
+                    КРУТИТЬ РУЛЕТКУ - 1 ⭐
                 </button>
             </div>
             
-            <!-- CONTESTS -->
-            <div class="contests-card">
-                <div class="section-title">🎯 КОНКУРСЫ</div>
-                <div class="contest-item">
-                    <div class="contest-title">УЛУЧШЕНИЯ 🔥</div>
-                    <div class="contest-time">Награды через: 3ч 7м</div>
+            <!-- NFT ROULETTE -->
+            <div class="roulette-container" id="nftRoulette" style="display:none">
+                <div class="wheel-container">
+                    <div class="arrow">▼</div>
+                    <div class="wheel" id="nftWheel"></div>
                 </div>
-                <div class="contest-item">
-                    <div class="contest-title">РЕФЕРАЛЬНАЯ ПРОГРАММА</div>
-                    <div class="contest-time">Постоянно</div>
+                <button class="spin-btn" onclick="spinRoulette('nft')">
+                    КРУТИТЬ РУЛЕТКУ - 5 ⭐
+                </button>
+            </div>
+            
+            <!-- PROBABILITIES -->
+            <div class="probabilities">
+                <div class="prob-title">🎯 ШАНСЫ ВЫИГРЫША</div>
+                <div class="prob-list" id="starsProb">
+                    <div class="prob-item">
+                        <span class="prob-name">10 звезд</span>
+                        <span class="prob-chance">50%</span>
+                    </div>
+                    <div class="prob-item">
+                        <span class="prob-name">20 звезд</span>
+                        <span class="prob-chance">30%</span>
+                    </div>
+                    <div class="prob-item">
+                        <span class="prob-name">50 звезд</span>
+                        <span class="prob-chance">15%</span>
+                    </div>
+                    <div class="prob-item">
+                        <span class="prob-name">100 звезд</span>
+                        <span class="prob-chance">5%</span>
+                    </div>
+                </div>
+                <div class="prob-list" id="nftProb" style="display:none">
+                    <div class="prob-item">
+                        <span class="prob-name">Moon NFT</span>
+                        <span class="prob-chance">50%</span>
+                    </div>
+                    <div class="prob-item">
+                        <span class="prob-name">CryptoPunk</span>
+                        <span class="prob-chance">25%</span>
+                    </div>
+                    <div class="prob-item">
+                        <span class="prob-name">Telegram Whale</span>
+                        <span class="prob-chance">15%</span>
+                    </div>
+                    <div class="prob-item">
+                        <span class="prob-name">LOL Pop NFT</span>
+                        <span class="prob-chance">8%</span>
+                    </div>
+                    <div class="prob-item">
+                        <span class="prob-name">Snoop Dogg NFT</span>
+                        <span class="prob-chance">2%</span>
+                    </div>
                 </div>
             </div>
         </div>
         
         <!-- BOTTOM NAVIGATION -->
         <div class="bottom-nav">
-            <div class="nav-item active" onclick="changeTab('home')">
+            <div class="nav-item active">
                 <div class="nav-icon">🏠</div>
                 Главная
             </div>
-            <div class="nav-item" onclick="changeTab('tasks')">
+            <div class="nav-item">
                 <div class="nav-icon">📋</div>
                 Задания
             </div>
-            <div class="nav-item" onclick="changeTab('roulette')">
+            <div class="nav-item">
                 <div class="nav-icon">🎰</div>
                 Рулетка
             </div>
-            <div class="nav-item" onclick="changeTab('shop')">
+            <div class="nav-item">
                 <div class="nav-icon">🛒</div>
                 Магазин
             </div>
-        </div>
-    </div>
-    
-    <!-- MODALS -->
-    <div class="modal" id="inventoryModal">
-        <div class="modal-content">
-            <div class="modal-title">🎒 ИНВЕНТАРЬ</div>
-            <p>Здесь будут ваши предметы и бонусы</p>
-            <button class="close-modal" onclick="closeModal('inventoryModal')">ЗАКРЫТЬ</button>
-        </div>
-    </div>
-    
-    <div class="modal" id="referralModal">
-        <div class="modal-content">
-            <div class="modal-title">👥 РЕФЕРАЛЫ</div>
-            <p>Приглашайте друзей и получайте бонусы!</p>
-            <button class="close-modal" onclick="closeModal('referralModal')">ЗАКРЫТЬ</button>
-        </div>
-    </div>
-    
-    <div class="modal" id="leaderboardModal">
-        <div class="modal-content">
-            <div class="modal-title">🏆 ТОП ИГРОКОВ</div>
-            <p>Таблица лидеров</p>
-            <button class="close-modal" onclick="closeModal('leaderboardModal')">ЗАКРЫТЬ</button>
-        </div>
-    </div>
-    
-    <div class="modal" id="shopModal">
-        <div class="modal-content">
-            <div class="modal-title">🛒 МАГАЗИН</div>
-            <p>Покупки за звёзды</p>
-            <button class="close-modal" onclick="closeModal('shopModal')">ЗАКРЫТЬ</button>
-        </div>
-    </div>
-    
-    <div class="modal" id="spinModal">
-        <div class="modal-content">
-            <div class="modal-title">🎰 РЕЗУЛЬТАТ</div>
-            <p id="spinResult">Вы выиграли 10 звёзд! 🎉</p>
-            <button class="close-modal" onclick="closeModal('spinModal')">OK</button>
         </div>
     </div>
 
@@ -442,56 +340,94 @@
         const user = tg.initDataUnsafe.user;
         document.getElementById('userName').textContent = user?.first_name || 'Игрок';
         
-        // Working functions
-        function changeTab(tab) {
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+        // Roulette prizes
+        const STAR_PRIZES = [
+            { name: "10 звезд", value: 10, probability: 0.5, color: "#FF6B6B" },
+            { name: "20 звезд", value: 20, probability: 0.3, color: "#4ECDC4" },
+            { name: "50 звезд", value: 50, probability: 0.15, color: "#FFD166" },
+            { name: "100 звезд", value: 100, probability: 0.05, color: "#6A0572" }
+        ];
+        
+        const NFT_PRIZES = [
+            { name: "Moon NFT", value: "moon", probability: 0.5, color: "#808080" },
+            { name: "CryptoPunk", value: "cryptopunk", probability: 0.25, color: "#4169E1" },
+            { name: "Telegram Whale", value: "tg_whale", probability: 0.15, color: "#008000" },
+            { name: "LOL Pop NFT", value: "lol_pop", probability: 0.08, color: "#800080" },
+            { name: "Snoop Dogg NFT", value: "snoop_dogg", probability: 0.02, color: "#FFD700" }
+        ];
+        
+        // Initialize wheels
+        function initWheels() {
+            createWheel('starsWheel', STAR_PRIZES);
+            createWheel('nftWheel', NFT_PRIZES);
+        }
+        
+        // Create wheel sectors
+        function createWheel(wheelId, prizes) {
+            const wheel = document.getElementById(wheelId);
+            wheel.innerHTML = '';
+            
+            const sectorAngle = 360 / prizes.length;
+            
+            prizes.forEach((prize, index) => {
+                const sector = document.createElement('div');
+                sector.className = 'sector';
+                sector.style.background = prize.color;
+                sector.style.transform = `rotate(${index * sectorAngle}deg)`;
+                
+                const text = document.createElement('div');
+                text.className = 'sector-text';
+                text.textContent = prize.name;
+                sector.appendChild(text);
+                
+                wheel.appendChild(sector);
+            });
+        }
+        
+        // Switch between roulettes
+        function switchRoulette(type) {
+            // Update tabs
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
-            // Здесь можно добавить логику смены контента
-        }
-        
-        function openModal(modalType) {
-            const modal = document.getElementById(modalType + 'Modal');
-            if (modal) modal.style.display = 'flex';
-        }
-        
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
-        
-        function spinRoulette() {
-            const prizes = [
-                { text: "Вы выиграли 5 звёзд! ⭐", amount: 5 },
-                { text: "Вы выиграли 10 звёзд! ✨", amount: 10 },
-                { text: "Вы выиграли 20 звёзд! 🎉", amount: 20 },
-                { text: "К сожалению, вы ничего не выиграли 😔", amount: 0 }
-            ];
             
-            const result = prizes[Math.floor(Math.random() * prizes.length)];
-            document.getElementById('spinResult').textContent = result.text;
+            // Show/hide roulettes
+            document.getElementById('starsRoulette').style.display = type === 'stars' ? 'block' : 'none';
+            document.getElementById('nftRoulette').style.display = type === 'nft' ? 'block' : 'none';
             
-            // Update balance
-            if (result.amount > 0) {
-                const currentBalance = parseInt(document.getElementById('balance').textContent.replace(',', ''));
-                document.getElementById('balance').textContent = (currentBalance + result.amount).toLocaleString();
-            }
+            // Show/hide probabilities
+            document.getElementById('starsProb').style.display = type === 'stars' ? 'block' : 'none';
+            document.getElementById('nftProb').style.display = type === 'nft' ? 'block' : 'none';
+        }
+        
+        // Spin roulette
+        function spinRoulette(type) {
+            const wheel = document.getElementById(type + 'Wheel');
+            const prizes = type === 'stars' ? STAR_PRIZES : NFT_PRIZES;
             
-            openModal('spin');
+            // Reset animation
+            wheel.style.transition = 'none';
+            wheel.style.transform = 'rotate(0deg)';
+            
+            // Force reflow
+            void wheel.offsetWidth;
+            
+            // Spin animation
+            const spins = 4 + Math.random() * 2; // 4-6 spins
+            const degrees = spins * 360 + Math.random() * 360;
+            
+            wheel.style.transition = 'transform 4s cubic-bezier(0.2, 0.8, 0.3, 1)';
+            wheel.style.transform = `rotate(${degrees}deg)`;
+            
+            // Determine result after spin
+            setTimeout(() => {
+                const resultIndex = Math.floor(Math.random() * prizes.length);
+                const result = prizes[resultIndex];
+                alert(`🎉 Вы выиграли: ${result.name}!`);
+            }, 4000);
         }
         
-        // Timer simulation
-        function updateTimer() {
-            const timer = document.getElementById('timer');
-            // Здесь можно добавить реальный таймер
-        }
-        
-        setInterval(updateTimer, 1000);
-        
-        // Close modal on outside click
-        window.onclick = function(event) {
-            if (event.target.classList.contains('modal')) {
-                event.target.style.display = 'none';
-            }
-        }
+        // Initialize on load
+        initWheels();
     </script>
 </body>
 </html>
