@@ -3,6 +3,7 @@
 <head>
     <title>Black Roulette</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * { 
             margin: 0; padding: 0; box-sizing: border-box; 
@@ -595,6 +596,11 @@
     </div>
 
     <script>
+        // SUPABASE КОНФИГ
+        const supabaseUrl = 'https://zoxhwfhfcraeizomhwcj.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpveGh3ZmhmY3JhZWl6b21od2NqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE5NDIxMjgsImV4cCI6MjA3NzUxODEyOH0.N4Oh7oGzfugr7GK8I_mupXGSFreIkFUjHOEafm3L5UM';
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
         let tg = window.Telegram.WebApp;
         tg.expand();
         tg.BackButton.hide();
@@ -663,30 +669,53 @@
             return Math.random().toString(36).substr(2, 8).toUpperCase();
         }
 
-        // ЗАГРУЗКА ДАННЫХ ИЗ TELEGRAM CLOUD STORAGE
-        function loadUserData() {
+        // ЗАГРУЗКА ДАННЫХ ИЗ SUPABASE
+        async function loadUserData() {
             try {
-                const saved = tg.CloudStorage.getItem(`user_${userId}`);
-                if (saved) {
-                    const parsed = JSON.parse(saved);
-                    userData = { ...userData, ...parsed };
-                    console.log("✅ Данные загружены:", userData);
+                const { data, error } = await supabase
+                    .from('users')
+                    .select('*')
+                    .eq('user_id', userId)
+                    .single();
+                
+                if (data) {
+                    userData = { ...userData, ...data };
+                    console.log("✅ Данные загружены из Supabase:", userData);
+                } else {
+                    // Создаем нового пользователя
+                    await saveUserData();
                 }
             } catch (error) {
-                console.log("🔄 Используем начальные данные");
+                console.log("🔄 Создаем нового пользователя");
             }
             updateUI();
         }
 
-        // СОХРАНЕНИЕ ДАННЫХ В TELEGRAM CLOUD STORAGE
-        function saveUserData() {
+        // СОХРАНЕНИЕ ДАННЫХ В SUPABASE
+        async function saveUserData() {
             try {
-                tg.CloudStorage.setItem(`user_${userId}`, JSON.stringify(userData));
-                console.log("💾 Данные сохранены:", userData);
+                const { error } = await supabase
+                    .from('users')
+                    .upsert({ 
+                        user_id: userId,
+                        username: user?.first_name || 'Игрок',
+                        balance: userData.balance,
+                        free_spin_time: userData.freeSpinTime,
+                        spin_count: userData.spinCount,
+                        total_win: userData.totalWin,
+                        ref_count: userData.refCount,
+                        ref_earned: userData.refEarned,
+                        ref_code: userData.refCode,
+                        inventory: userData.inventory
+                    });
+                
+                if (error) {
+                    console.log("❌ Ошибка Supabase:", error);
+                } else {
+                    console.log("💾 Данные сохранены в Supabase");
+                }
             } catch (error) {
-                console.log("❌ Ошибка сохранения");
-                // Резервное сохранение в localStorage
-                localStorage.setItem(`user_${userId}`, JSON.stringify(userData));
+                console.log("❌ Ошибка сохранения:", error);
             }
         }
 
@@ -925,7 +954,7 @@
                 spinBtn.disabled = false;
                 spinBtn.textContent = type === 'free' ? "КРУТИТЬ БЕСПЛАТНО" : `КРУТИТЬ - ${cost} ⭐`;
                 
-                // СОХРАНЯЕМ ДАННЫЕ
+                // СОХРАНЯЕМ ДАННЫЕ В SUPABASE
                 saveUserData();
                 updateUI();
                 
