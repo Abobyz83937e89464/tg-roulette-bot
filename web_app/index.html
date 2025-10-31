@@ -60,6 +60,25 @@
             overflow-y: auto;
         }
         
+        /* PAYMENT BUTTON */
+        .payment-btn {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            border: none;
+            border-radius: 15px;
+            padding: 18px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 20px;
+            transition: all 0.2s ease;
+        }
+        
+        .payment-btn:active {
+            transform: scale(0.98);
+        }
+        
         /* STATS GRID */
         .stats-grid {
             display: grid;
@@ -136,25 +155,6 @@
             font-weight: bold;
         }
         
-        /* PAYMENT BUTTON */
-        .payment-btn {
-            background: linear-gradient(135deg, #27ae60, #2ecc71);
-            border: none;
-            border-radius: 15px;
-            padding: 18px;
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            margin-bottom: 20px;
-            transition: all 0.2s ease;
-        }
-        
-        .payment-btn:active {
-            transform: scale(0.98);
-        }
-        
         /* HORIZONTAL ROULETTE */
         .roulette-section {
             background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
@@ -188,7 +188,7 @@
             top: 0;
             left: 0;
             height: 100%;
-            transition: transform 6s cubic-bezier(0.1, 0.8, 0.2, 1); /* Увеличил время прокрутки */
+            transition: transform 6s cubic-bezier(0.1, 0.8, 0.2, 1);
         }
         
         .roulette-item {
@@ -354,8 +354,8 @@
         
         <!-- MAIN CONTENT -->
         <div class="content">
-            <!-- PAYMENT -->
-            <button class="payment-btn" onclick="buyStars()">
+            <!-- PAYMENT BUTTON -->
+            <button class="payment-btn" onclick="showDepositInstructions()">
                 💰 ПОПОЛНИТЬ БАЛАНС
             </button>
             
@@ -547,6 +547,23 @@
         
         let userBalance = 50;
         
+        // Deposit instructions
+        function showDepositInstructions() {
+            const message = `💫 ДЛЯ ПОПОЛНЕНИЯ БАЛАНСА:
+
+📝 Напишите боту @HE3BECTH0 по шаблону:
+
+!пополнение 15
+!пополнение 25  
+!пополнение 100
+
+🎁 После команды киньте любой подарок или стикер!
+
+✅ Звёзды начислятся автоматически!`;
+
+            alert(message);
+        }
+        
         // Initialize roulettes
         function initRoulettes() {
             createRouletteTrack('starsTrack', STAR_PRIZES);
@@ -559,7 +576,7 @@
             track.innerHTML = '';
             
             // Create multiple copies for seamless scrolling
-            for (let copy = 0; copy < 5; copy++) { // Увеличил количество копий для долгой прокрутки
+            for (let copy = 0; copy < 5; copy++) {
                 prizes.forEach((prize, index) => {
                     const item = document.createElement('div');
                     item.className = 'roulette-item';
@@ -585,23 +602,6 @@
             document.getElementById('nftProb').style.display = type === 'nft' ? 'block' : 'none';
         }
         
-        // Buy stars function
-        function buyStars() {
-            const packages = [
-                { stars: 100, price: "₽99" },
-                { stars: 250, price: "₽199" },
-                { stars: 500, price: "₽399" },
-                { stars: 1000, price: "₽799" }
-            ];
-            
-            let message = "💰 ВЫБЕРИТЕ ПАКЕТ ЗВЁЗД:\n\n";
-            packages.forEach((pkg, index) => {
-                message += `${index + 1}. ${pkg.stars} ⭐ - ${pkg.price}\n`;
-            });
-            
-            alert(message + "\nДля пополнения напишите @YourBotName с выбранным пакетом");
-        }
-        
         // Spin roulette
         function spinRoulette(type) {
             const cost = type === 'stars' ? 10 : 50;
@@ -609,7 +609,7 @@
             // Check balance
             if (userBalance < cost) {
                 alert(`❌ Недостаточно звёзд! Нужно ${cost} ⭐`);
-                buyStars();
+                showDepositInstructions();
                 return;
             }
             
@@ -633,7 +633,7 @@
             const targetIndex = Math.floor(Math.random() * prizes.length) + (prizes.length * 2);
             const targetPosition = -(targetIndex * itemWidth) + (2 * itemWidth);
             
-            track.style.transition = 'transform 6s cubic-bezier(0.1, 0.8, 0.2, 1)'; // Увеличил время до 6 секунд
+            track.style.transition = 'transform 6s cubic-bezier(0.1, 0.8, 0.2, 1)';
             track.style.transform = `translateX(${targetPosition}px)`;
             
             // Determine result after spin
@@ -657,4 +657,4 @@
         initRoulettes();
     </script>
 </body>
-</html>
+    </html>
