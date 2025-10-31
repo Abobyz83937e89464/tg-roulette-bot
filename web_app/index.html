@@ -72,6 +72,12 @@
             margin-bottom: 20px; 
         }
         
+        .payment-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        
         /* STATS GRID */
         .stats-grid { 
             display: grid; 
@@ -287,6 +293,36 @@
             font-size: 18px; 
             margin-bottom: 4px; 
         }
+
+        /* OTHER SECTIONS */
+        .section { 
+            display: none; 
+            padding: 20px; 
+        }
+        
+        .section.active { 
+            display: block; 
+        }
+        
+        .task-item, .shop-item { 
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); 
+            border: 1px solid #333; 
+            border-radius: 12px; 
+            padding: 15px; 
+            margin-bottom: 10px; 
+        }
+        
+        .task-title, .shop-title { 
+            font-size: 16px; 
+            font-weight: bold; 
+            margin-bottom: 8px; 
+            color: #FFD700; 
+        }
+        
+        .task-reward, .shop-price { 
+            color: #00ff00; 
+            font-weight: bold; 
+        }
     </style>
 </head>
 <body>
@@ -298,7 +334,8 @@
             </div>
         </div>
         
-        <div class="content">
+        <!-- РАЗДЕЛ РУЛЕТОК (ПО УМОЛЧАНИЮ) -->
+        <div class="content" id="roulettesSection">
             <button class="payment-btn" onclick="showDepositInstructions()">💰 ПОПОЛНИТЬ БАЛАНС</button>
             
             <div class="stats-grid">
@@ -319,7 +356,7 @@
                 <div class="section-title">🎁 БЕСПЛАТНАЯ РУЛЕТКА</div>
                 <div class="spin-info">
                     <div class="free-spin" id="freeSpinText">✨ Доступно сейчас!</div>
-                    <div class="timer">⏰ Следующая через: <span id="freeTimer">24:00</span></div>
+                    <div class="timer">⏰ Следующая через: <span id="freeTimer">24:00:00</span></div>
                 </div>
                 
                 <div class="horizontal-roulette">
@@ -377,19 +414,112 @@
                     <div class="prob-item"><span class="prob-name">100 звезд</span><span class="prob-chance">5%</span></div>
                 </div>
                 <div class="prob-list" id="nftProb" style="display:none">
-                    <div class="prob-item"><span class="prob-name">Common NFT</span><span class="prob-chance">60%</span></div>
-                    <div class="prob-item"><span class="prob-name">Rare NFT</span><span class="prob-chance">25%</span></div>
-                    <div class="prob-item"><span class="prob-name">Epic NFT</span><span class="prob-chance">12%</span></div>
-                    <div class="prob-item"><span class="prob-name">Legendary NFT</span><span class="prob-chance">3%</span></div>
+                    <div class="prob-item"><span class="prob-name">Jingle Bells</span><span class="prob-chance">15%</span></div>
+                    <div class="prob-item"><span class="prob-name">Eternal Candle</span><span class="prob-chance">12%</span></div>
+                    <div class="prob-item"><span class="prob-name">Skull Flower</span><span class="prob-chance">8%</span></div>
+                    <div class="prob-item"><span class="prob-name">Sakura Flower</span><span class="prob-chance">14%</span></div>
+                    <div class="prob-item"><span class="prob-name">Jelly Bunny</span><span class="prob-chance">16%</span></div>
+                    <div class="prob-item"><span class="prob-name">Cupid Charm</span><span class="prob-chance">7%</span></div>
+                    <div class="prob-item"><span class="prob-name">Hanging Star</span><span class="prob-chance">10%</span></div>
+                    <div class="prob-item"><span class="prob-name">Easter Egg</span><span class="prob-chance">18%</span></div>
+                    <div class="prob-item"><span class="prob-name">Spy Agaric</span><span class="prob-chance">13%</span></div>
+                    <div class="prob-item"><span class="prob-name">Homemade Cake</span><span class="prob-chance">20%</span></div>
+                    <div class="prob-item"><span class="prob-name">Snow Globe</span><span class="prob-chance">11%</span></div>
+                    <div class="prob-item"><span class="prob-name">Xmas Stocking</span><span class="prob-chance">25%</span></div>
+                    <div class="prob-item"><span class="prob-name">B-Day Candle</span><span class="prob-chance">23%</span></div>
+                    <div class="prob-item"><span class="prob-name">Candy Cane</span><span class="prob-chance">24%</span></div>
+                    <div class="prob-item"><span class="prob-name">Lush Bouquet</span><span class="prob-chance">14%</span></div>
+                    <div class="prob-item"><span class="prob-name">Top Hat</span><span class="prob-chance">6%</span></div>
+                    <div class="prob-item"><span class="prob-name">Scared Cat</span><span class="prob-chance">4%</span></div>
+                    <div class="prob-item"><span class="prob-name">Spiced Wine</span><span class="prob-chance">15%</span></div>
+                    <div class="prob-item"><span class="prob-name">Evil Eye</span><span class="prob-chance">2%</span></div>
                 </div>
             </div>
         </div>
         
+        <!-- РАЗДЕЛ ГЛАВНОЙ -->
+        <div class="content section" id="mainSection">
+            <div class="roulette-section">
+                <div class="section-title">🏠 ГЛАВНОЕ МЕНЮ</div>
+                <button class="payment-btn" onclick="showSection('roulettes')">🎰 ПЕРЕЙТИ К РУЛЕТКАМ</button>
+                
+                <div class="task-item">
+                    <div class="task-title">📊 Статистика</div>
+                    <div>Всего вращений: <span class="task-reward">156</span></div>
+                    <div>Общий выигрыш: <span class="task-reward">5,280 ⭐</span></div>
+                    <div>Рефералы: <span class="task-reward">82</span></div>
+                </div>
+                
+                <div class="task-item">
+                    <div class="task-title">🎯 Быстрые действия</div>
+                    <button class="spin-btn" style="margin-bottom: 10px;" onclick="showDepositInstructions()">💰 ПОПОЛНИТЬ БАЛАНС</button>
+                    <button class="spin-btn" onclick="showSection('tasks')">📋 ВЫПОЛНИТЬ ЗАДАНИЯ</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- РАЗДЕЛ ЗАДАНИЙ -->
+        <div class="content section" id="tasksSection">
+            <div class="roulette-section">
+                <div class="section-title">📋 ЗАДАНИЯ</div>
+                
+                <div class="task-item">
+                    <div class="task-title">📱 Подписаться на канал</div>
+                    <div>Подпишитесь на наш Telegram канал</div>
+                    <div class="task-reward">Награда: 25 ⭐</div>
+                    <button class="spin-btn" style="margin-top: 10px;">ВЫПОЛНИТЬ</button>
+                </div>
+                
+                <div class="task-item">
+                    <div class="task-title">👥 Пригласить друга</div>
+                    <div>Пригласите друга по реферальной ссылке</div>
+                    <div class="task-reward">Награда: 50 ⭐</div>
+                    <button class="spin-btn" style="margin-top: 10px;">ПОЛУЧИТЬ ССЫЛКУ</button>
+                </div>
+                
+                <div class="task-item">
+                    <div class="task-title">🎮 Сыграть 10 раз</div>
+                    <div>Сыграйте в любую рулетку 10 раз</div>
+                    <div class="task-reward">Награда: 100 ⭐</div>
+                    <button class="spin-btn" style="margin-top: 10px;">ПРОВЕРИТЬ</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- РАЗДЕЛ МАГАЗИНА -->
+        <div class="content section" id="shopSection">
+            <div class="roulette-section">
+                <div class="section-title">🛒 МАГАЗИН</div>
+                
+                <div class="shop-item">
+                    <div class="shop-title">💎 Премиум статус</div>
+                    <div>Увеличивает шансы выигрыша на 15%</div>
+                    <div class="shop-price">Цена: 500 ⭐</div>
+                    <button class="spin-btn" style="margin-top: 10px;">КУПИТЬ</button>
+                </div>
+                
+                <div class="shop-item">
+                    <div class="shop-title">🎁 Набор новичка</div>
+                    <div>100 звезд + 5 бесплатных прокруток</div>
+                    <div class="shop-price">Цена: 300 ⭐</div>
+                    <button class="spin-btn" style="margin-top: 10px;">КУПИТЬ</button>
+                </div>
+                
+                <div class="shop-item">
+                    <div class="shop-title">⚡ Ускорение таймера</div>
+                    <div>Уменьшает время ожидания до 12 часов</div>
+                    <div class="shop-price">Цена: 200 ⭐</div>
+                    <button class="spin-btn" style="margin-top: 10px;">КУПИТЬ</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- НИЖНЕЕ МЕНЮ -->
         <div class="bottom-nav">
-            <div class="nav-item active"><div class="nav-icon">🏠</div>Главная</div>
-            <div class="nav-item"><div class="nav-icon">📋</div>Задания</div>
-            <div class="nav-item"><div class="nav-icon">🎰</div>Рулетка</div>
-            <div class="nav-item"><div class="nav-icon">🛒</div>Магазин</div>
+            <div class="nav-item" onclick="showSection('main')"><div class="nav-icon">🏠</div>Главная</div>
+            <div class="nav-item" onclick="showSection('tasks')"><div class="nav-icon">📋</div>Задания</div>
+            <div class="nav-item active"><div class="nav-icon">🎰</div>Рулетки</div>
+            <div class="nav-item" onclick="showSection('shop')"><div class="nav-icon">🛒</div>Магазин</div>
         </div>
     </div>
 
@@ -406,8 +536,8 @@
             { name: "1 ⭐", value: 1, probability: 0.4, color: "#FF6B6B" },
             { name: "5 ⭐", value: 5, probability: 0.3, color: "#4ECDC4" },
             { name: "10 ⭐", value: 10, probability: 0.2, color: "#FFD166" },
-            { name: "Common", value: "common_nft", probability: 0.08, color: "#808080" },
-            { name: "Rare", value: "rare_nft", probability: 0.02, color: "#008000" }
+            { name: "Common NFT", value: "common_nft", probability: 0.08, color: "#808080" },
+            { name: "Rare NFT", value: "rare_nft", probability: 0.02, color: "#008000" }
         ];
         
         const STAR_PRIZES = [
@@ -417,17 +547,57 @@
             { name: "100 ⭐", value: 100, probability: 0.05, color: "#6A0572" }
         ];
         
+        // ВАШ РЕАЛЬНЫЙ СПИСОК NFT
         const NFT_PRIZES = [
-            { name: "Common", value: "common", probability: 0.6, color: "#808080" },
-            { name: "Rare", value: "rare", probability: 0.25, color: "#008000" },
-            { name: "Epic", value: "epic", probability: 0.12, color: "#800080" },
-            { name: "Legendary", value: "legendary", probability: 0.03, color: "#FFD700" }
+            { name: "Jingle Bells", value: "jingle_bells", probability: 0.15, color: "#FF6B6B", rarity: "COMMON", supply: "124,593" },
+            { name: "Eternal Candle", value: "eternal_candle", probability: 0.12, color: "#4ECDC4", rarity: "COMMON", supply: "46,590" },
+            { name: "Skull Flower", value: "skull_flower", probability: 0.08, color: "#FFD166", rarity: "RARE", supply: "24,126" },
+            { name: "Sakura Flower", value: "sakura_flower", probability: 0.14, color: "#FF69B4", rarity: "COMMON", supply: "93,115" },
+            { name: "Jelly Bunny", value: "jelly_bunny", probability: 0.16, color: "#9B59B6", rarity: "COMMON", supply: "129,350" },
+            { name: "Cupid Charm", value: "cupid_charm", probability: 0.07, color: "#E74C3C", rarity: "RARE", supply: "33,112" },
+            { name: "Hanging Star", value: "hanging_star", probability: 0.1, color: "#F1C40F", rarity: "COMMON", supply: "58,118" },
+            { name: "Easter Egg", value: "easter_egg", probability: 0.18, color: "#27AE60", rarity: "COMMON", supply: "173,176" },
+            { name: "Spy Agaric", value: "spy_agaric", probability: 0.13, color: "#D35400", rarity: "COMMON", supply: "89,438" },
+            { name: "Homemade Cake", value: "homemade_cake", probability: 0.2, color: "#8E44AD", rarity: "COMMON", supply: "199,482" },
+            { name: "Snow Globe", value: "snow_globe", probability: 0.11, color: "#3498DB", rarity: "COMMON", supply: "72,788" },
+            { name: "Xmas Stocking", value: "xmas_stocking", probability: 0.25, color: "#E74C3C", rarity: "COMMON", supply: "334,632" },
+            { name: "B-Day Candle", value: "bday_candle", probability: 0.23, color: "#F39C12", rarity: "COMMON", supply: "308,639" },
+            { name: "Candy Cane", value: "candy_cane", probability: 0.24, color: "#C0392B", rarity: "COMMON", supply: "320,622" },
+            { name: "Lush Bouquet", value: "lush_bouquet", probability: 0.14, color: "#2ECC71", rarity: "COMMON", supply: "140,116" },
+            { name: "Top Hat", value: "top_hat", probability: 0.06, color: "#2C3E50", rarity: "RARE", supply: "35,099" },
+            { name: "Scared Cat", value: "scared_cat", probability: 0.04, color: "#7F8C8D", rarity: "EPIC", supply: "19,289" },
+            { name: "Spiced Wine", value: "spiced_wine", probability: 0.15, color: "#8B4513", rarity: "COMMON", supply: "146,090" },
+            { name: "Evil Eye", value: "evil_eye", probability: 0.02, color: "#8E44AD", rarity: "LEGENDARY", supply: "10,000" }
         ];
         
         let userBalance = 50;
         let freeSpinAvailable = true;
-        let isSpinning = false; // ЗАЩИТА ОТ МНОГОКРАТНОГО НАЖАТИЯ
-        
+        let isSpinning = false;
+        let freeSpinTimer = null;
+
+        // ПОКАЗАТЬ РАЗДЕЛ
+        function showSection(sectionName) {
+            // Скрыть все разделы
+            document.querySelectorAll('.content').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Показать выбранный раздел
+            document.getElementById(sectionName + 'Section').style.display = 'block';
+            
+            // Обновить активное меню
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Найти и активировать соответствующую кнопку меню
+            const menuItems = document.querySelectorAll('.nav-item');
+            const sectionIndex = ['main', 'tasks', 'roulettes', 'shop'].indexOf(sectionName);
+            if (sectionIndex !== -1 && menuItems[sectionIndex]) {
+                menuItems[sectionIndex].classList.add('active');
+            }
+        }
+
         function showDepositInstructions() {
             const message = `💫 ДЛЯ ПОПОЛНЕНИЯ БАЛАНСА:
 
@@ -447,6 +617,9 @@
             createRouletteTrack('freeTrack', FREE_PRIZES);
             createRouletteTrack('starsTrack', STAR_PRIZES);
             createRouletteTrack('nftTrack', NFT_PRIZES);
+            
+            // ЗАПУСТИТЬ РЕАЛЬНЫЙ ТАЙМЕР ПРИ ЗАГРУЗКЕ
+            startRealTimer();
         }
         
         function createRouletteTrack(trackId, prizes) {
@@ -477,7 +650,6 @@
         }
         
         function spinRoulette(type) {
-            // ЗАЩИТА ОТ МНОГОКРАТНОГО НАЖАТИЯ
             if (isSpinning) {
                 alert("⏳ Рулетка уже крутится!");
                 return;
@@ -486,7 +658,6 @@
             const cost = type === 'free' ? 0 : (type === 'stars' ? 10 : 50);
             const isFree = type === 'free';
             
-            // ПРОВЕРКА БАЛАНСА И ДОСТУПНОСТИ
             if (!isFree && userBalance < cost) {
                 alert(`❌ Недостаточно звёзд! Нужно ${cost} ⭐`);
                 showDepositInstructions();
@@ -498,26 +669,23 @@
                 return;
             }
             
-            // БЛОКИРОВКА КНОПКИ
             isSpinning = true;
             const spinBtn = document.getElementById(type + 'SpinBtn');
             spinBtn.disabled = true;
             spinBtn.textContent = "🌀 КРУТИМ...";
             
-            // СПИСАНИЕ СТОИМОСТИ
             if (!isFree) {
                 userBalance -= cost;
                 document.getElementById('balance').textContent = userBalance;
             } else {
                 freeSpinAvailable = false;
                 document.getElementById('freeSpinText').textContent = "⏳ Использовано";
-                startFreeSpinTimer();
+                startRealTimer(); // ЗАПУСК РЕАЛЬНОГО ТАЙМЕРА
             }
             
             const track = document.getElementById(type + 'Track');
             const prizes = type === 'free' ? FREE_PRIZES : (type === 'stars' ? STAR_PRIZES : NFT_PRIZES);
             
-            // АНИМАЦИЯ
             track.style.transition = 'none';
             track.style.transform = 'translateX(0)';
             void track.offsetWidth;
@@ -529,7 +697,6 @@
             track.style.transition = 'transform 4s cubic-bezier(0.1, 0.8, 0.2, 1)';
             track.style.transform = `translateX(${targetPosition}px)`;
             
-            // РЕЗУЛЬТАТ
             setTimeout(() => {
                 const resultIndex = targetIndex % prizes.length;
                 const result = prizes[resultIndex];
@@ -539,10 +706,9 @@
                     document.getElementById('balance').textContent = userBalance;
                     alert(`🎉 Вы выиграли: ${result.name}!`);
                 } else {
-                    alert(`🎉 Вы выиграли NFT: ${result.name}!`);
+                    alert(`🎉 Вы выиграли NFT: ${result.name} (${result.rarity})!\nВ наличии: ${result.supply} шт.`);
                 }
                 
-                // РАЗБЛОКИРОВКА КНОПКИ
                 isSpinning = false;
                 spinBtn.disabled = false;
                 spinBtn.textContent = type === 'free' ? "КРУТИТЬ БЕСПЛАТНО" : `КРУТИТЬ - ${cost} ⭐`;
@@ -550,26 +716,39 @@
             }, 4000);
         }
         
-        function startFreeSpinTimer() {
-            let timeLeft = 86399;
-            const timerElement = document.getElementById('freeTimer');
+        // РЕАЛЬНЫЙ ТАЙМЕР 24 ЧАСА
+        function startRealTimer() {
+            if (freeSpinTimer) {
+                clearInterval(freeSpinTimer);
+            }
             
-            const timer = setInterval(() => {
+            let timeLeft = 24 * 60 * 60; // 24 часа в секундах
+            
+            freeSpinTimer = setInterval(() => {
+                if (freeSpinAvailable) {
+                    clearInterval(freeSpinTimer);
+                    return;
+                }
+                
                 if (timeLeft <= 0) {
-                    clearInterval(timer);
+                    clearInterval(freeSpinTimer);
                     freeSpinAvailable = true;
                     document.getElementById('freeSpinText').textContent = "✨ Доступно сейчас!";
-                    timerElement.textContent = "00:00";
+                    document.getElementById('freeTimer').textContent = "00:00:00";
                     return;
                 }
                 
                 timeLeft--;
                 const hours = Math.floor(timeLeft / 3600);
                 const minutes = Math.floor((timeLeft % 3600) / 60);
-                timerElement.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+                const seconds = timeLeft % 60;
+                
+                document.getElementById('freeTimer').textContent = 
+                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
             }, 1000);
         }
-        
+
+        // ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ
         initRoulettes();
     </script>
 </body>
