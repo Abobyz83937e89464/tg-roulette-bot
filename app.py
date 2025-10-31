@@ -5,7 +5,7 @@ import random
 import os
 
 # Конфигурация
-BOT_TOKEN = os.getenv('BOT_TOKEN', '8052679500:AAGUPvXVnLfdYIpX68PWpcDejjCzcKwKwKE')
+BOT_TOKEN = os.getenv('BOT_TOKEN', '8052679500:AAEobQqpYnUxbfATmWa1tBIN-LZClPOUCbw')
 WEB_APP_URL = os.getenv('WEB_APP_URL', 'https://raw.githack.com/Abobyz83937e89464/tg-roulette-bot/main/web_app/index.html')
 
 # Инициализация БД
