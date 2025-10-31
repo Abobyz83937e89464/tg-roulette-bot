@@ -107,6 +107,48 @@
             font-weight: 500; 
         }
         
+        /* MAIN BUTTONS */
+        .main-buttons { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 12px; 
+            margin-bottom: 25px; 
+        }
+        
+        .main-btn { 
+            background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%); 
+            border: 1px solid #444; 
+            border-radius: 15px; 
+            padding: 20px 15px; 
+            color: white; 
+            font-size: 14px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: all 0.2s ease; 
+            position: relative;
+        }
+        
+        .btn-icon { 
+            font-size: 24px; 
+            margin-bottom: 8px; 
+        }
+        
+        .badge { 
+            position: absolute; 
+            top: -5px; 
+            right: -5px; 
+            background: #ff4444; 
+            color: white; 
+            border-radius: 50%; 
+            width: 20px; 
+            height: 20px; 
+            font-size: 12px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-weight: bold; 
+        }
+        
         /* ROULETTE TABS */
         .roulette-tabs { 
             display: grid; 
@@ -304,7 +346,7 @@
             display: block; 
         }
         
-        .task-item, .shop-item { 
+        .task-item, .shop-item, .inventory-item { 
             background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); 
             border: 1px solid #333; 
             border-radius: 12px; 
@@ -312,7 +354,7 @@
             margin-bottom: 10px; 
         }
         
-        .task-title, .shop-title { 
+        .task-title, .shop-title, .inventory-title { 
             font-size: 16px; 
             font-weight: bold; 
             margin-bottom: 8px; 
@@ -322,6 +364,17 @@
         .task-reward, .shop-price { 
             color: #00ff00; 
             font-weight: bold; 
+        }
+
+        .inventory-rarity {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 5px;
+        }
+
+        .inventory-supply {
+            font-size: 11px;
+            color: #666;
         }
     </style>
 </head>
@@ -339,9 +392,30 @@
             <button class="payment-btn" onclick="showDepositInstructions()">💰 ПОПОЛНИТЬ БАЛАНС</button>
             
             <div class="stats-grid">
-                <div class="stat-card"><div class="stat-value">82</div><div class="stat-label">РЕФЕРАЛЫ</div></div>
-                <div class="stat-card"><div class="stat-value">156</div><div class="stat-label">ВРАЩЕНИЙ</div></div>
-                <div class="stat-card"><div class="stat-value">5,280</div><div class="stat-label">ВЫИГРЫШ</div></div>
+                <div class="stat-card"><div class="stat-value" id="refCount">0</div><div class="stat-label">РЕФЕРАЛЫ</div></div>
+                <div class="stat-card"><div class="stat-value" id="spinCount">0</div><div class="stat-label">ВРАЩЕНИЙ</div></div>
+                <div class="stat-card"><div class="stat-value" id="totalWin">0</div><div class="stat-label">ВЫИГРЫШ</div></div>
+            </div>
+            
+            <!-- ВАШИ РОДНЫЕ КНОПКИ -->
+            <div class="main-buttons">
+                <button class="main-btn" onclick="showSection('inventory')">
+                    <div class="btn-icon">🎒</div>
+                    ИНВЕНТАРЬ
+                    <div class="badge" id="inventoryBadge">0</div>
+                </button>
+                <button class="main-btn" onclick="showSection('referral')">
+                    <div class="btn-icon">👥</div>
+                    РЕФЕРАЛЫ
+                </button>
+                <button class="main-btn" onclick="showSection('leaderboard')">
+                    <div class="btn-icon">🏆</div>
+                    ТОП ИГРОКОВ
+                </button>
+                <button class="main-btn" onclick="showSection('shop')">
+                    <div class="btn-icon">🛒</div>
+                    МАГАЗИН
+                </button>
             </div>
             
             <!-- 3 РУЛЕТКИ -->
@@ -437,51 +511,44 @@
             </div>
         </div>
         
-        <!-- РАЗДЕЛ ГЛАВНОЙ -->
-        <div class="content section" id="mainSection">
+        <!-- РАЗДЕЛ ИНВЕНТАРЯ -->
+        <div class="content section" id="inventorySection">
             <div class="roulette-section">
-                <div class="section-title">🏠 ГЛАВНОЕ МЕНЮ</div>
-                <button class="payment-btn" onclick="showSection('roulettes')">🎰 ПЕРЕЙТИ К РУЛЕТКАМ</button>
-                
-                <div class="task-item">
-                    <div class="task-title">📊 Статистика</div>
-                    <div>Всего вращений: <span class="task-reward">156</span></div>
-                    <div>Общий выигрыш: <span class="task-reward">5,280 ⭐</span></div>
-                    <div>Рефералы: <span class="task-reward">82</span></div>
+                <div class="section-title">🎒 ИНВЕНТАРЬ NFT</div>
+                <div id="inventoryList">
+                    <!-- NFT будут добавляться сюда -->
                 </div>
-                
-                <div class="task-item">
-                    <div class="task-title">🎯 Быстрые действия</div>
-                    <button class="spin-btn" style="margin-bottom: 10px;" onclick="showDepositInstructions()">💰 ПОПОЛНИТЬ БАЛАНС</button>
-                    <button class="spin-btn" onclick="showSection('tasks')">📋 ВЫПОЛНИТЬ ЗАДАНИЯ</button>
+                <div id="emptyInventory" style="text-align: center; color: #888; padding: 20px;">
+                    🎨 У вас пока нет NFT<br>Покрутите NFT рулетку!
                 </div>
             </div>
         </div>
         
-        <!-- РАЗДЕЛ ЗАДАНИЙ -->
-        <div class="content section" id="tasksSection">
+        <!-- РАЗДЕЛ РЕФЕРАЛОВ -->
+        <div class="content section" id="referralSection">
             <div class="roulette-section">
-                <div class="section-title">📋 ЗАДАНИЯ</div>
-                
+                <div class="section-title">👥 РЕФЕРАЛЬНАЯ СИСТЕМА</div>
                 <div class="task-item">
-                    <div class="task-title">📱 Подписаться на канал</div>
-                    <div>Подпишитесь на наш Telegram канал</div>
-                    <div class="task-reward">Награда: 25 ⭐</div>
-                    <button class="spin-btn" style="margin-top: 10px;">ВЫПОЛНИТЬ</button>
+                    <div class="task-title">💫 Пригласите друзей</div>
+                    <div>Ваша реферальная ссылка:</div>
+                    <div style="background: #2d2d2d; padding: 10px; border-radius: 8px; margin: 10px 0; font-size: 12px; word-break: break-all;" id="refLink">
+                        Загрузка...
+                    </div>
+                    <div>Приглашено: <span id="refCount2">0</span> друзей</div>
+                    <div>Заработано: <span id="refEarned">0</span> ⭐</div>
                 </div>
-                
+            </div>
+        </div>
+        
+        <!-- РАЗДЕЛ ТОПА -->
+        <div class="content section" id="leaderboardSection">
+            <div class="roulette-section">
+                <div class="section-title">🏆 ТОП ИГРОКОВ</div>
                 <div class="task-item">
-                    <div class="task-title">👥 Пригласить друга</div>
-                    <div>Пригласите друга по реферальной ссылке</div>
-                    <div class="task-reward">Награда: 50 ⭐</div>
-                    <button class="spin-btn" style="margin-top: 10px;">ПОЛУЧИТЬ ССЫЛКУ</button>
-                </div>
-                
-                <div class="task-item">
-                    <div class="task-title">🎮 Сыграть 10 раз</div>
-                    <div>Сыграйте в любую рулетку 10 раз</div>
-                    <div class="task-reward">Награда: 100 ⭐</div>
-                    <button class="spin-btn" style="margin-top: 10px;">ПРОВЕРИТЬ</button>
+                    <div class="task-title">📊 Рейтинг игроков</div>
+                    <div style="text-align: center; color: #888; padding: 20px;">
+                        Система рейтинга в разработке...
+                    </div>
                 </div>
             </div>
         </div>
@@ -516,9 +583,9 @@
         
         <!-- НИЖНЕЕ МЕНЮ -->
         <div class="bottom-nav">
-            <div class="nav-item" onclick="showSection('main')"><div class="nav-icon">🏠</div>Главная</div>
-            <div class="nav-item" onclick="showSection('tasks')"><div class="nav-icon">📋</div>Задания</div>
             <div class="nav-item active"><div class="nav-icon">🎰</div>Рулетки</div>
+            <div class="nav-item" onclick="showSection('inventory')"><div class="nav-icon">🎒</div>Инвентарь</div>
+            <div class="nav-item" onclick="showSection('referral')"><div class="nav-icon">👥</div>Рефералы</div>
             <div class="nav-item" onclick="showSection('shop')"><div class="nav-icon">🛒</div>Магазин</div>
         </div>
     </div>
@@ -529,6 +596,7 @@
         tg.BackButton.hide();
         
         const user = tg.initDataUnsafe.user;
+        const userId = user?.id || Math.random().toString(36).substr(2, 9);
         document.getElementById('userName').textContent = user?.first_name || 'Игрок';
         
         // ПРИЗЫ ДЛЯ 3 РУЛЕТОК
@@ -547,7 +615,7 @@
             { name: "100 ⭐", value: 100, probability: 0.05, color: "#6A0572" }
         ];
         
-        // ВАШ РЕАЛЬНЫЙ СПИСОК NFT С ПРАВИЛЬНЫМИ ШАНСАМИ
+        // ВАШ РЕАЛЬНЫЙ СПИСОК NFT
         const NFT_PRIZES = [
             { name: "Jingle Bells", value: "jingle_bells", probability: 0.10, color: "#FF6B6B", rarity: "COMMON", supply: "124,593" },
             { name: "Eternal Candle", value: "eternal_candle", probability: 0.08, color: "#4ECDC4", rarity: "COMMON", supply: "46,590" },
@@ -570,31 +638,127 @@
             { name: "Evil Eye", value: "evil_eye", probability: 0.01, color: "#8E44AD", rarity: "LEGENDARY", supply: "10,000" }
         ];
         
-        let userBalance = 50;
-        let freeSpinAvailable = true;
+        // ДАННЫЕ ПОЛЬЗОВАТЕЛЯ
+        let userData = {
+            balance: 50,
+            freeSpinAvailable: true,
+            freeSpinTime: 0,
+            spinCount: 0,
+            totalWin: 0,
+            refCount: 0,
+            inventory: [],
+            lastSpinTime: 0
+        };
+        
         let isSpinning = false;
         let freeSpinTimer = null;
 
+        // ЗАГРУЗКА ДАННЫХ ИЗ TELEGRAM
+        function loadUserData() {
+            const saved = tg.CloudStorage.getItem(`user_${userId}`);
+            if (saved) {
+                userData = { ...userData, ...JSON.parse(saved) };
+            }
+            updateUI();
+        }
+
+        // СОХРАНЕНИЕ ДАННЫХ В TELEGRAM
+        function saveUserData() {
+            tg.CloudStorage.setItem(`user_${userId}`, JSON.stringify(userData));
+        }
+
+        // ОБНОВЛЕНИЕ ИНТЕРФЕЙСА
+        function updateUI() {
+            document.getElementById('balance').textContent = userData.balance;
+            document.getElementById('spinCount').textContent = userData.spinCount;
+            document.getElementById('totalWin').textContent = userData.totalWin.toLocaleString();
+            document.getElementById('refCount').textContent = userData.refCount;
+            document.getElementById('refCount2').textContent = userData.refCount;
+            document.getElementById('inventoryBadge').textContent = userData.inventory.length;
+            
+            // Обновляем инвентарь
+            updateInventory();
+            
+            // Обновляем таймер
+            updateFreeSpinTimer();
+        }
+
+        // ОБНОВЛЕНИЕ ИНВЕНТАРЯ
+        function updateInventory() {
+            const inventoryList = document.getElementById('inventoryList');
+            const emptyInventory = document.getElementById('emptyInventory');
+            
+            if (userData.inventory.length === 0) {
+                inventoryList.innerHTML = '';
+                emptyInventory.style.display = 'block';
+                return;
+            }
+            
+            emptyInventory.style.display = 'none';
+            inventoryList.innerHTML = '';
+            
+            // Группируем NFT по названию
+            const nftCounts = {};
+            userData.inventory.forEach(nft => {
+                nftCounts[nft.name] = (nftCounts[nft.name] || 0) + 1;
+            });
+            
+            // Создаем элементы инвентаря
+            Object.entries(nftCounts).forEach(([nftName, count]) => {
+                const nft = NFT_PRIZES.find(item => item.name === nftName);
+                if (nft) {
+                    const item = document.createElement('div');
+                    item.className = 'inventory-item';
+                    item.innerHTML = `
+                        <div class="inventory-title">${nft.name} ×${count}</div>
+                        <div class="inventory-rarity">Редкость: ${nft.rarity}</div>
+                        <div class="inventory-supply">Всего: ${nft.supply} шт.</div>
+                    `;
+                    item.style.borderLeft = `4px solid ${nft.color}`;
+                    inventoryList.appendChild(item);
+                }
+            });
+        }
+
+        // ОБНОВЛЕНИЕ ТАЙМЕРА БЕСПЛАТНОЙ ПРОКРУТКИ
+        function updateFreeSpinTimer() {
+            if (!userData.freeSpinAvailable && userData.freeSpinTime > 0) {
+                const timePassed = Date.now() - userData.freeSpinTime;
+                const timeLeft = Math.max(0, 86400000 - timePassed); // 24 часа
+                
+                if (timeLeft <= 0) {
+                    userData.freeSpinAvailable = true;
+                    userData.freeSpinTime = 0;
+                    document.getElementById('freeSpinText').textContent = "✨ Доступно сейчас!";
+                    document.getElementById('freeTimer').textContent = "00:00:00";
+                    saveUserData();
+                } else {
+                    startRealTimer(timeLeft);
+                }
+            }
+        }
+
         // ПОКАЗАТЬ РАЗДЕЛ
         function showSection(sectionName) {
-            // Скрыть все разделы
             document.querySelectorAll('.content').forEach(section => {
                 section.style.display = 'none';
             });
             
-            // Показать выбранный раздел
             document.getElementById(sectionName + 'Section').style.display = 'block';
             
-            // Обновить активное меню
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.classList.remove('active');
             });
             
-            // Найти и активировать соответствующую кнопку меню
             const menuItems = document.querySelectorAll('.nav-item');
-            const sectionIndex = ['main', 'tasks', 'roulettes', 'shop'].indexOf(sectionName);
+            const sectionIndex = ['roulettes', 'inventory', 'referral', 'shop'].indexOf(sectionName);
             if (sectionIndex !== -1 && menuItems[sectionIndex]) {
                 menuItems[sectionIndex].classList.add('active');
+            }
+            
+            // Обновляем реферальную ссылку
+            if (sectionName === 'referral') {
+                document.getElementById('refLink').textContent = `https://t.me/BlackRouletteBot?start=ref_${userId}`;
             }
         }
 
@@ -617,9 +781,6 @@
             createRouletteTrack('freeTrack', FREE_PRIZES);
             createRouletteTrack('starsTrack', STAR_PRIZES);
             createRouletteTrack('nftTrack', NFT_PRIZES);
-            
-            // ЗАПУСТИТЬ РЕАЛЬНЫЙ ТАЙМЕР ПРИ ЗАГРУЗКЕ
-            startRealTimer();
         }
         
         function createRouletteTrack(trackId, prizes) {
@@ -658,13 +819,13 @@
             const cost = type === 'free' ? 0 : (type === 'stars' ? 10 : 50);
             const isFree = type === 'free';
             
-            if (!isFree && userBalance < cost) {
+            if (!isFree && userData.balance < cost) {
                 alert(`❌ Недостаточно звёзд! Нужно ${cost} ⭐`);
                 showDepositInstructions();
                 return;
             }
             
-            if (isFree && !freeSpinAvailable) {
+            if (isFree && !userData.freeSpinAvailable) {
                 alert("❌ Бесплатная прокрутка уже использована! Ждите 24 часа.");
                 return;
             }
@@ -675,12 +836,12 @@
             spinBtn.textContent = "🌀 КРУТИМ...";
             
             if (!isFree) {
-                userBalance -= cost;
-                document.getElementById('balance').textContent = userBalance;
+                userData.balance -= cost;
             } else {
-                freeSpinAvailable = false;
+                userData.freeSpinAvailable = false;
+                userData.freeSpinTime = Date.now();
                 document.getElementById('freeSpinText').textContent = "⏳ Использовано";
-                startRealTimer(); // ЗАПУСК РЕАЛЬНОГО ТАЙМЕРА
+                startRealTimer(86400000); // 24 часа
             }
             
             const track = document.getElementById(type + 'Track');
@@ -694,7 +855,7 @@
             const targetIndex = Math.floor(Math.random() * prizes.length) + (prizes.length * 2);
             const targetPosition = -(targetIndex * itemWidth) + (2 * itemWidth);
             
-            // ДОЛГАЯ И БЫСТРАЯ АНИМАЦИЯ - 10 СЕКУНД
+            // ОДИНАКОВАЯ СКОРОСТЬ ДЛЯ ВСЕХ РУЛЕТОК - 10 СЕКУНД
             track.style.transition = 'transform 10s cubic-bezier(0.1, 0.2, 0.8, 0.9)';
             track.style.transform = `translateX(${targetPosition}px)`;
             
@@ -702,11 +863,22 @@
                 const resultIndex = targetIndex % prizes.length;
                 const result = prizes[resultIndex];
                 
+                userData.spinCount++;
+                
                 if (type === 'free' || type === 'stars') {
-                    userBalance += result.value;
-                    document.getElementById('balance').textContent = userBalance;
+                    userData.balance += result.value;
+                    userData.totalWin += result.value;
                     alert(`🎉 Вы выиграли: ${result.name}!`);
                 } else {
+                    // ДОБАВЛЯЕМ NFT В ИНВЕНТАРЬ
+                    userData.inventory.push({
+                        name: result.name,
+                        value: result.value,
+                        rarity: result.rarity,
+                        supply: result.supply,
+                        color: result.color,
+                        wonAt: new Date().toLocaleDateString()
+                    });
                     alert(`🎉 Вы выиграли NFT: ${result.name} (${result.rarity})!\nВ наличии: ${result.supply} шт.`);
                 }
                 
@@ -714,35 +886,41 @@
                 spinBtn.disabled = false;
                 spinBtn.textContent = type === 'free' ? "КРУТИТЬ БЕСПЛАТНО" : `КРУТИТЬ - ${cost} ⭐`;
                 
+                // СОХРАНЯЕМ ДАННЫЕ
+                saveUserData();
+                updateUI();
+                
             }, 10000); // 10 СЕКУНД
         }
         
-        // РЕАЛЬНЫЙ ТАЙМЕР 24 ЧАСА
-        function startRealTimer() {
+        // РЕАЛЬНЫЙ ТАЙМЕР
+        function startRealTimer(duration) {
             if (freeSpinTimer) {
                 clearInterval(freeSpinTimer);
             }
             
-            let timeLeft = 24 * 60 * 60; // 24 часа в секундах
+            let timeLeft = duration;
             
             freeSpinTimer = setInterval(() => {
-                if (freeSpinAvailable) {
+                if (userData.freeSpinAvailable) {
                     clearInterval(freeSpinTimer);
                     return;
                 }
                 
                 if (timeLeft <= 0) {
                     clearInterval(freeSpinTimer);
-                    freeSpinAvailable = true;
+                    userData.freeSpinAvailable = true;
+                    userData.freeSpinTime = 0;
                     document.getElementById('freeSpinText').textContent = "✨ Доступно сейчас!";
                     document.getElementById('freeTimer').textContent = "00:00:00";
+                    saveUserData();
                     return;
                 }
                 
-                timeLeft--;
-                const hours = Math.floor(timeLeft / 3600);
-                const minutes = Math.floor((timeLeft % 3600) / 60);
-                const seconds = timeLeft % 60;
+                timeLeft -= 1000;
+                const hours = Math.floor(timeLeft / 3600000);
+                const minutes = Math.floor((timeLeft % 3600000) / 60000);
+                const seconds = Math.floor((timeLeft % 60000) / 1000);
                 
                 document.getElementById('freeTimer').textContent = 
                     `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
@@ -750,6 +928,7 @@
         }
 
         // ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ
+        loadUserData();
         initRoulettes();
     </script>
 </body>
