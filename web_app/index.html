@@ -4,347 +4,60 @@
     <title>Black Roulette</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background: #0a0a0a; color: #fff; font-family: Arial; overflow: hidden; height: 100vh; }
+        .app { height: 100vh; display: flex; flex-direction: column; background: #0a0a0a; }
         
-        body {
-            background: #0a0a0a;
-            color: #ffffff;
-            font-family: 'Segoe UI', Arial, sans-serif;
-            overflow: hidden;
-            height: 100vh;
-            user-select: none;
-        }
+        .header { background: linear-gradient(135deg, #1a1a1a 0%, #000 100%); padding: 15px 20px; border-bottom: 1px solid #333; }
+        .user-info { display: flex; justify-content: space-between; align-items: center; }
+        .user-name { font-size: 18px; font-weight: 600; }
+        .balance { background: linear-gradient(45deg, #8B4513, #A0522D); padding: 8px 15px; border-radius: 20px; font-weight: bold; }
         
-        .app {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            background: #0a0a0a;
-        }
+        .content { flex: 1; padding: 20px; overflow-y: auto; }
         
-        /* HEADER */
-        .header {
-            background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
-            padding: 15px 20px;
-            border-bottom: 1px solid #333;
-        }
+        .payment-btn { background: linear-gradient(135deg, #27ae60, #2ecc71); border: none; border-radius: 15px; padding: 18px; color: white; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%; margin-bottom: 20px; }
         
-        .user-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 25px; }
+        .stat-card { background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); border: 1px solid #333; border-radius: 12px; padding: 15px 10px; text-align: center; }
+        .stat-value { font-size: 20px; font-weight: bold; color: #FFD700; margin-bottom: 5px; }
+        .stat-label { font-size: 12px; color: #888; font-weight: 500; }
         
-        .user-name {
-            font-size: 18px;
-            font-weight: 600;
-        }
+        .main-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 25px; }
+        .main-btn { background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%); border: 1px solid #444; border-radius: 15px; padding: 20px 15px; color: white; font-size: 14px; font-weight: 600; cursor: pointer; }
+        .btn-icon { font-size: 24px; margin-bottom: 8px; }
         
-        .balance {
-            background: linear-gradient(45deg, #8B4513, #A0522D);
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 16px;
-        }
+        .roulette-section { background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); border: 1px solid #333; border-radius: 15px; padding: 20px; margin-bottom: 20px; }
+        .section-title { font-size: 20px; font-weight: bold; margin-bottom: 15px; color: #FFD700; text-align: center; }
         
-        /* MAIN CONTENT */
-        .content {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-        }
+        .horizontal-roulette { position: relative; height: 120px; margin: 20px 0; overflow: hidden; border-radius: 10px; background: #000; border: 2px solid #333; }
+        .roulette-track { display: flex; position: absolute; top: 0; left: 0; height: 100%; transition: transform 6s cubic-bezier(0.1, 0.8, 0.2, 1); }
+        .roulette-item { width: 100px; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; border-right: 1px solid #333; font-weight: bold; font-size: 12px; text-align: center; padding: 5px; }
+        .center-line { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 3px; height: 100%; background: #ff4444; z-index: 10; box-shadow: 0 0 15px rgba(255,0,0,0.7); }
         
-        /* PAYMENT BUTTON */
-        .payment-btn {
-            background: linear-gradient(135deg, #27ae60, #2ecc71);
-            border: none;
-            border-radius: 15px;
-            padding: 18px;
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            margin-bottom: 20px;
-            transition: all 0.2s ease;
-        }
+        .spin-info { text-align: center; margin-bottom: 15px; }
+        .free-spin { color: #00ff00; font-size: 16px; font-weight: 600; margin-bottom: 5px; }
+        .timer { color: #ff4444; font-size: 14px; font-weight: 500; }
         
-        .payment-btn:active {
-            transform: scale(0.98);
-        }
+        .spin-btn { background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%); border: none; border-radius: 25px; padding: 18px; color: white; font-size: 18px; font-weight: bold; cursor: pointer; width: 100%; }
         
-        /* STATS GRID */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 25px;
-        }
+        .roulette-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .tab-btn { background: #2d2d2d; border: 1px solid #444; border-radius: 10px; padding: 12px; color: #888; font-weight: 600; cursor: pointer; }
+        .tab-btn.active { background: linear-gradient(135deg, #8B4513 0%, #654321 100%); color: white; border-color: #A0522D; }
         
-        .stat-card {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            border: 1px solid #333;
-            border-radius: 12px;
-            padding: 15px 10px;
-            text-align: center;
-        }
+        .probabilities { background: #1a1a1a; border: 1px solid #333; border-radius: 15px; padding: 20px; margin-bottom: 20px; }
+        .prob-title { font-size: 18px; font-weight: bold; margin-bottom: 15px; color: #FFD700; text-align: center; }
+        .prob-item { display: flex; justify-content: space-between; margin-bottom: 8px; padding: 8px; background: #2d2d2d; border-radius: 8px; }
+        .prob-name { font-weight: 500; }
+        .prob-chance { color: #FFD700; font-weight: bold; }
         
-        .stat-value {
-            font-size: 20px;
-            font-weight: bold;
-            color: #FFD700;
-            margin-bottom: 5px;
-        }
-        
-        .stat-label {
-            font-size: 12px;
-            color: #888;
-            font-weight: 500;
-        }
-        
-        /* MAIN BUTTONS */
-        .main-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 25px;
-        }
-        
-        .main-btn {
-            background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
-            border: 1px solid #444;
-            border-radius: 15px;
-            padding: 20px 15px;
-            color: white;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            position: relative;
-        }
-        
-        .main-btn:active {
-            transform: scale(0.98);
-            background: linear-gradient(135deg, #3d3d3d 0%, #2a2a2a 100%);
-        }
-        
-        .btn-icon {
-            font-size: 24px;
-            margin-bottom: 8px;
-        }
-        
-        .badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: #ff4444;
-            color: white;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-        
-        /* HORIZONTAL ROULETTE */
-        .roulette-section {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            border: 1px solid #333;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        
-        .section-title {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: #FFD700;
-            text-align: center;
-        }
-        
-        .horizontal-roulette {
-            position: relative;
-            height: 120px;
-            margin: 20px 0;
-            overflow: hidden;
-            border-radius: 10px;
-            background: #000;
-            border: 2px solid #333;
-        }
-        
-        .roulette-track {
-            display: flex;
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-            transition: transform 6s cubic-bezier(0.1, 0.8, 0.2, 1);
-        }
-        
-        .roulette-item {
-            width: 100px;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border-right: 1px solid #333;
-            font-weight: bold;
-            font-size: 12px;
-            text-align: center;
-            padding: 5px;
-        }
-        
-        .center-line {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 3px;
-            height: 100%;
-            background: #ff4444;
-            z-index: 10;
-            box-shadow: 0 0 15px rgba(255,0,0,0.7);
-        }
-        
-        .spin-info {
-            text-align: center;
-            margin-bottom: 15px;
-        }
-        
-        .free-spin {
-            color: #00ff00;
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-        
-        .timer {
-            color: #ff4444;
-            font-size: 14px;
-            font-weight: 500;
-        }
-        
-        .spin-btn {
-            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
-            border: none;
-            border-radius: 25px;
-            padding: 18px;
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.2s ease;
-        }
-        
-        .spin-btn:active {
-            transform: scale(0.95);
-        }
-        
-        /* ROULETTE TABS */
-        .roulette-tabs {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        
-        .tab-btn {
-            background: #2d2d2d;
-            border: 1px solid #444;
-            border-radius: 10px;
-            padding: 12px;
-            color: #888;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .tab-btn.active {
-            background: linear-gradient(135deg, #8B4513 0%, #654321 100%);
-            color: white;
-            border-color: #A0522D;
-        }
-        
-        /* PROBABILITIES */
-        .probabilities {
-            background: #1a1a1a;
-            border: 1px solid #333;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        
-        .prob-title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: #FFD700;
-            text-align: center;
-        }
-        
-        .prob-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            padding: 8px;
-            background: #2d2d2d;
-            border-radius: 8px;
-        }
-        
-        .prob-name {
-            font-weight: 500;
-        }
-        
-        .prob-chance {
-            color: #FFD700;
-            font-weight: bold;
-        }
-        
-        /* BOTTOM NAV */
-        .bottom-nav {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr;
-            background: #1a1a1a;
-            border-top: 1px solid #333;
-            padding: 10px 0;
-        }
-        
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 8px 5px;
-            color: #888;
-            font-size: 12px;
-            font-weight: 500;
-            cursor: pointer;
-        }
-        
-        .nav-item.active {
-            color: #FFD700;
-        }
-        
-        .nav-icon {
-            font-size: 20px;
-            margin-bottom: 4px;
-        }
+        .bottom-nav { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; background: #1a1a1a; border-top: 1px solid #333; padding: 10px 0; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; padding: 8px 5px; color: #888; font-size: 12px; font-weight: 500; cursor: pointer; }
+        .nav-item.active { color: #FFD700; }
+        .nav-icon { font-size: 20px; margin-bottom: 4px; }
     </style>
 </head>
 <body>
     <div class="app">
-        <!-- HEADER -->
         <div class="header">
             <div class="user-info">
                 <div class="user-name" id="userName">Player</div>
@@ -352,67 +65,32 @@
             </div>
         </div>
         
-        <!-- MAIN CONTENT -->
         <div class="content">
-            <!-- PAYMENT BUTTON -->
-            <button class="payment-btn" onclick="showDepositInstructions()">
-                💰 ПОПОЛНИТЬ БАЛАНС
-            </button>
+            <button class="payment-btn" onclick="showDepositInstructions()">💰 ПОПОЛНИТЬ БАЛАНС</button>
             
-            <!-- STATS -->
             <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-value">82</div>
-                    <div class="stat-label">РЕФЕРАЛЫ</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">156</div>
-                    <div class="stat-label">ВРАЩЕНИЙ</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">5,280</div>
-                    <div class="stat-label">ВЫИГРЫШ</div>
-                </div>
+                <div class="stat-card"><div class="stat-value">82</div><div class="stat-label">РЕФЕРАЛЫ</div></div>
+                <div class="stat-card"><div class="stat-value">156</div><div class="stat-label">ВРАЩЕНИЙ</div></div>
+                <div class="stat-card"><div class="stat-value">5,280</div><div class="stat-label">ВЫИГРЫШ</div></div>
             </div>
             
-            <!-- MAIN BUTTONS -->
             <div class="main-buttons">
-                <button class="main-btn" onclick="openModal('inventory')">
-                    <div class="btn-icon">🎒</div>
-                    ИНВЕНТАРЬ
-                </button>
-                <button class="main-btn" onclick="openModal('referral')">
-                    <div class="btn-icon">👥</div>
-                    РЕФЕРАЛЫ
-                    <div class="badge">3</div>
-                </button>
-                <button class="main-btn" onclick="openModal('leaderboard')">
-                    <div class="btn-icon">🏆</div>
-                    ТОП ИГРОКОВ
-                </button>
-                <button class="main-btn" onclick="openModal('shop')">
-                    <div class="btn-icon">🛒</div>
-                    МАГАЗИН
-                    <div class="badge">1</div>
-                </button>
+                <button class="main-btn" onclick="openModal('inventory')"><div class="btn-icon">🎒</div>ИНВЕНТАРЬ</button>
+                <button class="main-btn" onclick="openModal('referral')"><div class="btn-icon">👥</div>РЕФЕРАЛЫ</button>
+                <button class="main-btn" onclick="openModal('leaderboard')"><div class="btn-icon">🏆</div>ТОП ИГРОКОВ</button>
+                <button class="main-btn" onclick="openModal('shop')"><div class="btn-icon">🛒</div>МАГАЗИН</button>
             </div>
             
-            <!-- ROULETTE TABS -->
             <div class="roulette-tabs">
-                <button class="tab-btn active" onclick="switchRoulette('stars')">
-                    ⭐ ЗВЁЗДЫ
-                </button>
-                <button class="tab-btn" onclick="switchRoulette('nft')">
-                    🎨 NFT
-                </button>
+                <button class="tab-btn active" onclick="switchRoulette('stars')">⭐ ЗВЁЗДЫ</button>
+                <button class="tab-btn" onclick="switchRoulette('nft')">🎨 NFT</button>
             </div>
             
-            <!-- STARS ROULETTE -->
             <div class="roulette-section" id="starsRoulette">
                 <div class="section-title">🎰 РУЛЕТКА ЗВЁЗД</div>
                 <div class="spin-info">
                     <div class="free-spin">✨ БЕСПЛАТНОЕ ВРАЩЕНИЕ</div>
-                    <div class="timer">⏰ ЧЕРЕЗ: <span id="timer">19:43:25</span></div>
+                    <div class="timer">⏰ ЧЕРЕЗ: <span id="timer">00:00</span></div>
                 </div>
                 
                 <div class="horizontal-roulette">
@@ -420,17 +98,14 @@
                     <div class="roulette-track" id="starsTrack"></div>
                 </div>
                 
-                <button class="spin-btn" onclick="spinRoulette('stars')">
-                    КРУТИТЬ РУЛЕТКУ - 10 ⭐
-                </button>
+                <button class="spin-btn" onclick="spinRoulette('stars')">КРУТИТЬ РУЛЕТКУ - 10 ⭐</button>
             </div>
             
-            <!-- NFT ROULETTE -->
             <div class="roulette-section" id="nftRoulette" style="display:none">
                 <div class="section-title">🎨 NFT РУЛЕТКА</div>
                 <div class="spin-info">
                     <div class="free-spin">✨ БЕСПЛАТНОЕ ВРАЩЕНИЕ</div>
-                    <div class="timer">⏰ ЧЕРЕЗ: <span id="nftTimer">19:43:25</span></div>
+                    <div class="timer">⏰ ЧЕРЕЗ: <span id="nftTimer">00:00</span></div>
                 </div>
                 
                 <div class="horizontal-roulette">
@@ -438,71 +113,31 @@
                     <div class="roulette-track" id="nftTrack"></div>
                 </div>
                 
-                <button class="spin-btn" onclick="spinRoulette('nft')">
-                    КРУТИТЬ РУЛЕТКУ - 50 ⭐
-                </button>
+                <button class="spin-btn" onclick="spinRoulette('nft')">КРУТИТЬ РУЛЕТКУ - 50 ⭐</button>
             </div>
             
-            <!-- PROBABILITIES -->
             <div class="probabilities">
                 <div class="prob-title">🎯 ШАНСЫ ВЫИГРЫША</div>
                 <div class="prob-list" id="starsProb">
-                    <div class="prob-item">
-                        <span class="prob-name">10 звезд</span>
-                        <span class="prob-chance">50%</span>
-                    </div>
-                    <div class="prob-item">
-                        <span class="prob-name">25 звезд</span>
-                        <span class="prob-chance">30%</span>
-                    </div>
-                    <div class="prob-item">
-                        <span class="prob-name">50 звезд</span>
-                        <span class="prob-chance">15%</span>
-                    </div>
-                    <div class="prob-item">
-                        <span class="prob-name">100 звезд</span>
-                        <span class="prob-chance">5%</span>
-                    </div>
+                    <div class="prob-item"><span class="prob-name">10 звезд</span><span class="prob-chance">50%</span></div>
+                    <div class="prob-item"><span class="prob-name">25 звезд</span><span class="prob-chance">30%</span></div>
+                    <div class="prob-item"><span class="prob-name">50 звезд</span><span class="prob-chance">15%</span></div>
+                    <div class="prob-item"><span class="prob-name">100 звезд</span><span class="prob-chance">5%</span></div>
                 </div>
                 <div class="prob-list" id="nftProb" style="display:none">
-                    <div class="prob-item">
-                        <span class="prob-name">Common NFT</span>
-                        <span class="prob-chance">60%</span>
-                    </div>
-                    <div class="prob-item">
-                        <span class="prob-name">Rare NFT</span>
-                        <span class="prob-chance">25%</span>
-                    </div>
-                    <div class="prob-item">
-                        <span class="prob-name">Epic NFT</span>
-                        <span class="prob-chance">12%</span>
-                    </div>
-                    <div class="prob-item">
-                        <span class="prob-name">Legendary NFT</span>
-                        <span class="prob-chance">3%</span>
-                    </div>
+                    <div class="prob-item"><span class="prob-name">Common NFT</span><span class="prob-chance">60%</span></div>
+                    <div class="prob-item"><span class="prob-name">Rare NFT</span><span class="prob-chance">25%</span></div>
+                    <div class="prob-item"><span class="prob-name">Epic NFT</span><span class="prob-chance">12%</span></div>
+                    <div class="prob-item"><span class="prob-name">Legendary NFT</span><span class="prob-chance">3%</span></div>
                 </div>
             </div>
         </div>
         
-        <!-- BOTTOM NAVIGATION -->
         <div class="bottom-nav">
-            <div class="nav-item active">
-                <div class="nav-icon">🏠</div>
-                Главная
-            </div>
-            <div class="nav-item">
-                <div class="nav-icon">📋</div>
-                Задания
-            </div>
-            <div class="nav-item">
-                <div class="nav-icon">🎰</div>
-                Рулетка
-            </div>
-            <div class="nav-item">
-                <div class="nav-icon">🛒</div>
-                Магазин
-            </div>
+            <div class="nav-item active"><div class="nav-icon">🏠</div>Главная</div>
+            <div class="nav-item"><div class="nav-icon">📋</div>Задания</div>
+            <div class="nav-item"><div class="nav-icon">🎰</div>Рулетка</div>
+            <div class="nav-item"><div class="nav-icon">🛒</div>Магазин</div>
         </div>
     </div>
 
@@ -511,11 +146,17 @@
         tg.expand();
         tg.BackButton.hide();
         
-        // User data
         const user = tg.initDataUnsafe.user;
         document.getElementById('userName').textContent = user?.first_name || 'Игрок';
         
-        // Real NFT list
+        // ПРАВИЛЬНЫЕ ПРИЗЫ - теперь дают точное количество звезд
+        const STAR_PRIZES = [
+            { name: "10 ⭐", value: 10, probability: 0.5, color: "#FF6B6B" },
+            { name: "25 ⭐", value: 25, probability: 0.3, color: "#4ECDC4" },
+            { name: "50 ⭐", value: 50, probability: 0.15, color: "#FFD166" },
+            { name: "100 ⭐", value: 100, probability: 0.05, color: "#6A0572" }
+        ];
+        
         const REAL_NFT = [
             { name: "Jingle Bells", value: "jingle_bells", probability: 0.15, color: "#FF6B6B", rarity: "COMMON", supply: "124,593" },
             { name: "Eternal Candle", value: "eternal_candle", probability: 0.12, color: "#4ECDC4", rarity: "COMMON", supply: "46,590" },
@@ -526,28 +167,12 @@
             { name: "Hanging Star", value: "hanging_star", probability: 0.1, color: "#F1C40F", rarity: "COMMON", supply: "58,118" },
             { name: "Easter Egg", value: "easter_egg", probability: 0.18, color: "#27AE60", rarity: "COMMON", supply: "173,176" },
             { name: "Spy Agaric", value: "spy_agaric", probability: 0.13, color: "#D35400", rarity: "COMMON", supply: "89,438" },
-            { name: "Homemade Cake", value: "homemade_cake", probability: 0.2, color: "#8E44AD", rarity: "COMMON", supply: "199,482" },
-            { name: "Snow Globe", value: "snow_globe", probability: 0.11, color: "#3498DB", rarity: "COMMON", supply: "72,788" },
-            { name: "Xmas Stocking", value: "xmas_stocking", probability: 0.25, color: "#E74C3C", rarity: "COMMON", supply: "334,632" },
-            { name: "B-Day Candle", value: "bday_candle", probability: 0.23, color: "#F39C12", rarity: "COMMON", supply: "308,639" },
-            { name: "Candy Cane", value: "candy_cane", probability: 0.24, color: "#C0392B", rarity: "COMMON", supply: "320,622" },
-            { name: "Lush Bouquet", value: "lush_bouquet", probability: 0.14, color: "#2ECC71", rarity: "COMMON", supply: "140,116" },
-            { name: "Top Hat", value: "top_hat", probability: 0.06, color: "#2C3E50", rarity: "RARE", supply: "35,099" },
-            { name: "Scared Cat", value: "scared_cat", probability: 0.04, color: "#7F8C8D", rarity: "EPIC", supply: "19,289" },
-            { name: "Spiced Wine", value: "spiced_wine", probability: 0.15, color: "#8B4513", rarity: "COMMON", supply: "146,090" },
-            { name: "Evil Eye", value: "evil_eye", probability: 0.02, color: "#8E44AD", rarity: "LEGENDARY", supply: "10,000" }
-        ];
-        
-        const STAR_PRIZES = [
-            { name: "10 ⭐", value: 10, probability: 0.5, color: "#FF6B6B" },
-            { name: "25 ⭐", value: 25, probability: 0.3, color: "#4ECDC4" },
-            { name: "50 ⭐", value: 50, probability: 0.15, color: "#FFD166" },
-            { name: "100 ⭐", value: 100, probability: 0.05, color: "#6A0572" }
+            { name: "Homemade Cake", value: "homemade_cake", probability: 0.2, color: "#8E44AD", rarity: "COMMON", supply: "199,482" }
         ];
         
         let userBalance = 50;
+        let freeSpinAvailable = true;
         
-        // Deposit instructions
         function showDepositInstructions() {
             const message = `💫 ДЛЯ ПОПОЛНЕНИЯ БАЛАНСА:
 
@@ -560,22 +185,17 @@
 🎁 После команды киньте любой подарок или стикер!
 
 ✅ Звёзды начислятся автоматически!`;
-
             alert(message);
         }
         
-        // Initialize roulettes
         function initRoulettes() {
             createRouletteTrack('starsTrack', STAR_PRIZES);
             createRouletteTrack('nftTrack', REAL_NFT);
         }
         
-        // Create horizontal roulette track
         function createRouletteTrack(trackId, prizes) {
             const track = document.getElementById(trackId);
             track.innerHTML = '';
-            
-            // Create multiple copies for seamless scrolling
             for (let copy = 0; copy < 5; copy++) {
                 prizes.forEach((prize, index) => {
                     const item = document.createElement('div');
@@ -587,74 +207,80 @@
             }
         }
         
-        // Switch between roulettes
         function switchRoulette(type) {
-            // Update tabs
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
-            
-            // Show/hide roulettes
             document.getElementById('starsRoulette').style.display = type === 'stars' ? 'block' : 'none';
             document.getElementById('nftRoulette').style.display = type === 'nft' ? 'block' : 'none';
-            
-            // Show/hide probabilities
             document.getElementById('starsProb').style.display = type === 'stars' ? 'block' : 'none';
             document.getElementById('nftProb').style.display = type === 'nft' ? 'block' : 'none';
         }
         
-        // Spin roulette
         function spinRoulette(type) {
             const cost = type === 'stars' ? 10 : 50;
+            const isFree = freeSpinAvailable && type === 'stars';
             
-            // Check balance
-            if (userBalance < cost) {
+            if (!isFree && userBalance < cost) {
                 alert(`❌ Недостаточно звёзд! Нужно ${cost} ⭐`);
                 showDepositInstructions();
                 return;
             }
             
-            // Deduct cost
-            userBalance -= cost;
-            document.getElementById('balance').textContent = userBalance;
+            if (!isFree) {
+                userBalance -= cost;
+                document.getElementById('balance').textContent = userBalance;
+            } else {
+                freeSpinAvailable = false;
+                document.getElementById('timer').textContent = "23:59";
+                startFreeSpinTimer();
+            }
             
             const track = document.getElementById(type + 'Track');
             const prizes = type === 'stars' ? STAR_PRIZES : REAL_NFT;
             
-            // Reset animation
             track.style.transition = 'none';
             track.style.transform = 'translateX(0)';
-            
-            // Force reflow
             void track.offsetWidth;
             
-            // Long spin animation
             const itemWidth = 100;
-            const itemsCount = prizes.length * 5;
             const targetIndex = Math.floor(Math.random() * prizes.length) + (prizes.length * 2);
             const targetPosition = -(targetIndex * itemWidth) + (2 * itemWidth);
             
             track.style.transition = 'transform 6s cubic-bezier(0.1, 0.8, 0.2, 1)';
             track.style.transform = `translateX(${targetPosition}px)`;
             
-            // Determine result after spin
             setTimeout(() => {
                 const resultIndex = targetIndex % prizes.length;
                 const result = prizes[resultIndex];
                 
                 if (type === 'stars') {
-                    // Add stars prize
+                    // ТОЧНОЕ НАЧИСЛЕНИЕ - 10 даст 10, 25 даст 25 и т.д.
                     userBalance += result.value;
                     document.getElementById('balance').textContent = userBalance;
                     alert(`🎉 Вы выиграли: ${result.name}!`);
                 } else {
-                    // NFT prize
                     alert(`🎉 Вы выиграли NFT: ${result.name} (${result.rarity})!\nВ наличии: ${result.supply} шт.`);
                 }
             }, 6000);
         }
         
-        // Initialize on load
+        function startFreeSpinTimer() {
+            let timeLeft = 86399; // 23:59:59
+            const timer = setInterval(() => {
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    freeSpinAvailable = true;
+                    document.getElementById('timer').textContent = "00:00";
+                    return;
+                }
+                timeLeft--;
+                const hours = Math.floor(timeLeft / 3600);
+                const minutes = Math.floor((timeLeft % 3600) / 60);
+                document.getElementById('timer').textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+        
         initRoulettes();
     </script>
 </body>
-    </html>
+</html>
