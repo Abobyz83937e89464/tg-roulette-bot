@@ -60,19 +60,190 @@
             overflow-y: auto;
         }
         
+        /* STATS GRID */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 15px 10px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #FFD700;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #888;
+            font-weight: 500;
+        }
+        
+        /* MAIN BUTTONS */
+        .main-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+        
+        .main-btn {
+            background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+            border: 1px solid #444;
+            border-radius: 15px;
+            padding: 20px 15px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        
+        .main-btn:active {
+            transform: scale(0.98);
+            background: linear-gradient(135deg, #3d3d3d 0%, #2a2a2a 100%);
+        }
+        
+        .btn-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        
+        .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ff4444;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        /* HORIZONTAL ROULETTE */
+        .roulette-section {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            border: 1px solid #333;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #FFD700;
+            text-align: center;
+        }
+        
+        .horizontal-roulette {
+            position: relative;
+            height: 120px;
+            margin: 20px 0;
+            overflow: hidden;
+            border-radius: 10px;
+            background: #000;
+        }
+        
+        .roulette-track {
+            display: flex;
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            transition: transform 4s cubic-bezier(0.2, 0.8, 0.3, 1);
+        }
+        
+        .roulette-item {
+            width: 100px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-right: 1px solid #333;
+            font-weight: bold;
+            font-size: 12px;
+            text-align: center;
+        }
+        
+        .center-line {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 100%;
+            background: #ff4444;
+            z-index: 10;
+            box-shadow: 0 0 10px rgba(255,0,0,0.5);
+        }
+        
+        .spin-info {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .free-spin {
+            color: #00ff00;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .timer {
+            color: #ff4444;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .spin-btn {
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+            border: none;
+            border-radius: 25px;
+            padding: 18px;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+        
+        .spin-btn:active {
+            transform: scale(0.95);
+        }
+        
         /* ROULETTE TABS */
         .roulette-tabs {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
         .tab-btn {
             background: #2d2d2d;
             border: 1px solid #444;
             border-radius: 10px;
-            padding: 15px;
+            padding: 12px;
             color: #888;
             font-weight: 600;
             cursor: pointer;
@@ -85,83 +256,13 @@
             border-color: #A0522D;
         }
         
-        /* ROULETTE CONTAINER */
-        .roulette-container {
-            position: relative;
-            margin-bottom: 30px;
-        }
-        
-        .wheel-container {
-            position: relative;
-            width: 300px;
-            height: 300px;
-            margin: 0 auto 20px;
-        }
-        
-        .wheel {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            position: relative;
-            transition: transform 4s cubic-bezier(0.2, 0.8, 0.3, 1);
-            border: 5px solid #333;
-        }
-        
-        .arrow {
-            position: absolute;
-            top: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 30px;
-            color: #ff4444;
-            z-index: 10;
-            text-shadow: 0 0 10px rgba(255,0,0,0.5);
-        }
-        
-        .sector {
-            position: absolute;
-            width: 50%;
-            height: 50%;
-            transform-origin: 100% 100%;
-            clip-path: polygon(100% 0, 0% 100%, 100% 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .sector-text {
-            transform: rotate(45deg);
-            font-size: 12px;
-            font-weight: bold;
-            color: white;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-        }
-        
-        /* SPIN BUTTON */
-        .spin-btn {
-            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
-            border: none;
-            border-radius: 25px;
-            padding: 20px;
-            color: white;
-            font-size: 20px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            margin-bottom: 20px;
-            transition: all 0.2s ease;
-        }
-        
-        .spin-btn:active {
-            transform: scale(0.95);
-        }
-        
         /* PROBABILITIES */
         .probabilities {
             background: #1a1a1a;
             border: 1px solid #333;
             border-radius: 15px;
             padding: 20px;
+            margin-bottom: 20px;
         }
         
         .prob-title {
@@ -232,6 +333,44 @@
         
         <!-- MAIN CONTENT -->
         <div class="content">
+            <!-- STATS -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">82</div>
+                    <div class="stat-label">РЕФЕРАЛЫ</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">156</div>
+                    <div class="stat-label">ВРАЩЕНИЙ</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">5,280</div>
+                    <div class="stat-label">ВЫИГРЫШ</div>
+                </div>
+            </div>
+            
+            <!-- MAIN BUTTONS -->
+            <div class="main-buttons">
+                <button class="main-btn" onclick="openModal('inventory')">
+                    <div class="btn-icon">🎒</div>
+                    ИНВЕНТАРЬ
+                </button>
+                <button class="main-btn" onclick="openModal('referral')">
+                    <div class="btn-icon">👥</div>
+                    РЕФЕРАЛЫ
+                    <div class="badge">3</div>
+                </button>
+                <button class="main-btn" onclick="openModal('leaderboard')">
+                    <div class="btn-icon">🏆</div>
+                    ТОП ИГРОКОВ
+                </button>
+                <button class="main-btn" onclick="openModal('shop')">
+                    <div class="btn-icon">🛒</div>
+                    МАГАЗИН
+                    <div class="badge">1</div>
+                </button>
+            </div>
+            
             <!-- ROULETTE TABS -->
             <div class="roulette-tabs">
                 <button class="tab-btn active" onclick="switchRoulette('stars')">
@@ -243,22 +382,36 @@
             </div>
             
             <!-- STARS ROULETTE -->
-            <div class="roulette-container" id="starsRoulette">
-                <div class="wheel-container">
-                    <div class="arrow">▼</div>
-                    <div class="wheel" id="starsWheel"></div>
+            <div class="roulette-section" id="starsRoulette">
+                <div class="section-title">🎰 РУЛЕТКА ЗВЁЗД</div>
+                <div class="spin-info">
+                    <div class="free-spin">✨ БЕСПЛАТНОЕ ВРАЩЕНИЕ</div>
+                    <div class="timer">⏰ ЧЕРЕЗ: <span id="timer">19:43:25</span></div>
                 </div>
+                
+                <div class="horizontal-roulette">
+                    <div class="center-line"></div>
+                    <div class="roulette-track" id="starsTrack"></div>
+                </div>
+                
                 <button class="spin-btn" onclick="spinRoulette('stars')">
                     КРУТИТЬ РУЛЕТКУ - 1 ⭐
                 </button>
             </div>
             
             <!-- NFT ROULETTE -->
-            <div class="roulette-container" id="nftRoulette" style="display:none">
-                <div class="wheel-container">
-                    <div class="arrow">▼</div>
-                    <div class="wheel" id="nftWheel"></div>
+            <div class="roulette-section" id="nftRoulette" style="display:none">
+                <div class="section-title">🎨 NFT РУЛЕТКА</div>
+                <div class="spin-info">
+                    <div class="free-spin">✨ БЕСПЛАТНОЕ ВРАЩЕНИЕ</div>
+                    <div class="timer">⏰ ЧЕРЕЗ: <span id="nftTimer">19:43:25</span></div>
                 </div>
+                
+                <div class="horizontal-roulette">
+                    <div class="center-line"></div>
+                    <div class="roulette-track" id="nftTrack"></div>
+                </div>
+                
                 <button class="spin-btn" onclick="spinRoulette('nft')">
                     КРУТИТЬ РУЛЕТКУ - 5 ⭐
                 </button>
@@ -342,46 +495,41 @@
         
         // Roulette prizes
         const STAR_PRIZES = [
-            { name: "10 звезд", value: 10, probability: 0.5, color: "#FF6B6B" },
-            { name: "20 звезд", value: 20, probability: 0.3, color: "#4ECDC4" },
-            { name: "50 звезд", value: 50, probability: 0.15, color: "#FFD166" },
-            { name: "100 звезд", value: 100, probability: 0.05, color: "#6A0572" }
+            { name: "10 ⭐", value: 10, probability: 0.5, color: "#FF6B6B" },
+            { name: "20 ⭐", value: 20, probability: 0.3, color: "#4ECDC4" },
+            { name: "50 ⭐", value: 50, probability: 0.15, color: "#FFD166" },
+            { name: "100 ⭐", value: 100, probability: 0.05, color: "#6A0572" }
         ];
         
         const NFT_PRIZES = [
-            { name: "Moon NFT", value: "moon", probability: 0.5, color: "#808080" },
-            { name: "CryptoPunk", value: "cryptopunk", probability: 0.25, color: "#4169E1" },
-            { name: "Telegram Whale", value: "tg_whale", probability: 0.15, color: "#008000" },
-            { name: "LOL Pop NFT", value: "lol_pop", probability: 0.08, color: "#800080" },
-            { name: "Snoop Dogg NFT", value: "snoop_dogg", probability: 0.02, color: "#FFD700" }
+            { name: "Moon 🌙", value: "moon", probability: 0.5, color: "#808080" },
+            { name: "CryptoPunk 👾", value: "cryptopunk", probability: 0.25, color: "#4169E1" },
+            { name: "TG Whale 🐋", value: "tg_whale", probability: 0.15, color: "#008000" },
+            { name: "LOL Pop 💜", value: "lol_pop", probability: 0.08, color: "#800080" },
+            { name: "Snoop Dogg 🐶", value: "snoop_dogg", probability: 0.02, color: "#FFD700" }
         ];
         
-        // Initialize wheels
-        function initWheels() {
-            createWheel('starsWheel', STAR_PRIZES);
-            createWheel('nftWheel', NFT_PRIZES);
+        // Initialize roulettes
+        function initRoulettes() {
+            createRouletteTrack('starsTrack', STAR_PRIZES);
+            createRouletteTrack('nftTrack', NFT_PRIZES);
         }
         
-        // Create wheel sectors
-        function createWheel(wheelId, prizes) {
-            const wheel = document.getElementById(wheelId);
-            wheel.innerHTML = '';
+        // Create horizontal roulette track
+        function createRouletteTrack(trackId, prizes) {
+            const track = document.getElementById(trackId);
+            track.innerHTML = '';
             
-            const sectorAngle = 360 / prizes.length;
-            
-            prizes.forEach((prize, index) => {
-                const sector = document.createElement('div');
-                sector.className = 'sector';
-                sector.style.background = prize.color;
-                sector.style.transform = `rotate(${index * sectorAngle}deg)`;
-                
-                const text = document.createElement('div');
-                text.className = 'sector-text';
-                text.textContent = prize.name;
-                sector.appendChild(text);
-                
-                wheel.appendChild(sector);
-            });
+            // Create multiple copies for seamless scrolling
+            for (let copy = 0; copy < 3; copy++) {
+                prizes.forEach((prize, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'roulette-item';
+                    item.style.background = prize.color;
+                    item.textContent = prize.name;
+                    track.appendChild(item);
+                });
+            }
         }
         
         // Switch between roulettes
@@ -401,33 +549,35 @@
         
         // Spin roulette
         function spinRoulette(type) {
-            const wheel = document.getElementById(type + 'Wheel');
+            const track = document.getElementById(type + 'Track');
             const prizes = type === 'stars' ? STAR_PRIZES : NFT_PRIZES;
             
             // Reset animation
-            wheel.style.transition = 'none';
-            wheel.style.transform = 'rotate(0deg)';
+            track.style.transition = 'none';
+            track.style.transform = 'translateX(0)';
             
             // Force reflow
-            void wheel.offsetWidth;
+            void track.offsetWidth;
             
             // Spin animation
-            const spins = 4 + Math.random() * 2; // 4-6 spins
-            const degrees = spins * 360 + Math.random() * 360;
+            const itemWidth = 100;
+            const itemsCount = prizes.length * 3;
+            const targetIndex = Math.floor(Math.random() * prizes.length) + prizes.length;
+            const targetPosition = -(targetIndex * itemWidth) + (2 * itemWidth);
             
-            wheel.style.transition = 'transform 4s cubic-bezier(0.2, 0.8, 0.3, 1)';
-            wheel.style.transform = `rotate(${degrees}deg)`;
+            track.style.transition = 'transform 4s cubic-bezier(0.2, 0.8, 0.3, 1)';
+            track.style.transform = `translateX(${targetPosition}px)`;
             
             // Determine result after spin
             setTimeout(() => {
-                const resultIndex = Math.floor(Math.random() * prizes.length);
+                const resultIndex = targetIndex % prizes.length;
                 const result = prizes[resultIndex];
                 alert(`🎉 Вы выиграли: ${result.name}!`);
             }, 4000);
         }
         
         // Initialize on load
-        initWheels();
+        initRoulettes();
     </script>
 </body>
-</html>
+    </html>
