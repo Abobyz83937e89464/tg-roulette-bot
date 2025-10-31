@@ -72,12 +72,6 @@
             margin-bottom: 20px; 
         }
         
-        .payment-btn:disabled {
-            background: #666;
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
-        
         /* STATS GRID */
         .stats-grid { 
             display: grid; 
@@ -342,10 +336,6 @@
             padding: 20px; 
         }
         
-        .section.active { 
-            display: block; 
-        }
-        
         .task-item, .shop-item, .inventory-item { 
             background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); 
             border: 1px solid #333; 
@@ -376,6 +366,17 @@
             font-size: 11px;
             color: #666;
         }
+
+        .copy-btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            border: none;
+            border-radius: 8px;
+            padding: 8px 12px;
+            color: white;
+            font-size: 12px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
@@ -387,7 +388,7 @@
             </div>
         </div>
         
-        <!-- РАЗДЕЛ РУЛЕТОК (ПО УМОЛЧАНИЮ) -->
+        <!-- РАЗДЕЛ РУЛЕТОК -->
         <div class="content" id="roulettesSection">
             <button class="payment-btn" onclick="showDepositInstructions()">💰 ПОПОЛНИТЬ БАЛАНС</button>
             
@@ -397,7 +398,7 @@
                 <div class="stat-card"><div class="stat-value" id="totalWin">0</div><div class="stat-label">ВЫИГРЫШ</div></div>
             </div>
             
-            <!-- ВАШИ РОДНЫЕ КНОПКИ -->
+            <!-- ОСНОВНЫЕ КНОПКИ -->
             <div class="main-buttons">
                 <button class="main-btn" onclick="showSection('inventory')">
                     <div class="btn-icon">🎒</div>
@@ -534,8 +535,11 @@
                     <div style="background: #2d2d2d; padding: 10px; border-radius: 8px; margin: 10px 0; font-size: 12px; word-break: break-all;" id="refLink">
                         Загрузка...
                     </div>
-                    <div>Приглашено: <span id="refCount2">0</span> друзей</div>
-                    <div>Заработано: <span id="refEarned">0</span> ⭐</div>
+                    <button class="copy-btn" onclick="copyRefLink()">📋 КОПИРОВАТЬ</button>
+                    <div style="margin-top: 10px;">
+                        <div>Приглашено: <span id="refCount2">0</span> друзей</div>
+                        <div>Заработано: <span id="refEarned">0</span> ⭐</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -583,7 +587,7 @@
         
         <!-- НИЖНЕЕ МЕНЮ -->
         <div class="bottom-nav">
-            <div class="nav-item active"><div class="nav-icon">🎰</div>Рулетки</div>
+            <div class="nav-item active" onclick="showSection('roulettes')"><div class="nav-icon">🎰</div>Рулетки</div>
             <div class="nav-item" onclick="showSection('inventory')"><div class="nav-icon">🎒</div>Инвентарь</div>
             <div class="nav-item" onclick="showSection('referral')"><div class="nav-icon">👥</div>Рефералы</div>
             <div class="nav-item" onclick="showSection('shop')"><div class="nav-icon">🛒</div>Магазин</div>
@@ -646,25 +650,44 @@
             spinCount: 0,
             totalWin: 0,
             refCount: 0,
+            refEarned: 0,
             inventory: [],
-            lastSpinTime: 0
+            refCode: generateRefCode()
         };
         
         let isSpinning = false;
         let freeSpinTimer = null;
 
-        // ЗАГРУЗКА ДАННЫХ ИЗ TELEGRAM
+        // ГЕНЕРАЦИЯ УНИКАЛЬНОГО REF CODE
+        function generateRefCode() {
+            return Math.random().toString(36).substr(2, 8).toUpperCase();
+        }
+
+        // ЗАГРУЗКА ДАННЫХ ИЗ TELEGRAM CLOUD STORAGE
         function loadUserData() {
-            const saved = tg.CloudStorage.getItem(`user_${userId}`);
-            if (saved) {
-                userData = { ...userData, ...JSON.parse(saved) };
+            try {
+                const saved = tg.CloudStorage.getItem(`user_${userId}`);
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    userData = { ...userData, ...parsed };
+                    console.log("✅ Данные загружены:", userData);
+                }
+            } catch (error) {
+                console.log("🔄 Используем начальные данные");
             }
             updateUI();
         }
 
-        // СОХРАНЕНИЕ ДАННЫХ В TELEGRAM
+        // СОХРАНЕНИЕ ДАННЫХ В TELEGRAM CLOUD STORAGE
         function saveUserData() {
-            tg.CloudStorage.setItem(`user_${userId}`, JSON.stringify(userData));
+            try {
+                tg.CloudStorage.setItem(`user_${userId}`, JSON.stringify(userData));
+                console.log("💾 Данные сохранены:", userData);
+            } catch (error) {
+                console.log("❌ Ошибка сохранения");
+                // Резервное сохранение в localStorage
+                localStorage.setItem(`user_${userId}`, JSON.stringify(userData));
+            }
         }
 
         // ОБНОВЛЕНИЕ ИНТЕРФЕЙСА
@@ -674,7 +697,11 @@
             document.getElementById('totalWin').textContent = userData.totalWin.toLocaleString();
             document.getElementById('refCount').textContent = userData.refCount;
             document.getElementById('refCount2').textContent = userData.refCount;
+            document.getElementById('refEarned').textContent = userData.refEarned;
             document.getElementById('inventoryBadge').textContent = userData.inventory.length;
+            
+            // Обновляем реферальную ссылку
+            document.getElementById('refLink').textContent = `https://t.me/${tg.initDataUnsafe.user?.username || 'BlackRouletteBot'}?start=ref_${userData.refCode}`;
             
             // Обновляем инвентарь
             updateInventory();
@@ -720,6 +747,14 @@
             });
         }
 
+        // КОПИРОВАНИЕ РЕФЕРАЛЬНОЙ ССЫЛКИ
+        function copyRefLink() {
+            const refLink = document.getElementById('refLink').textContent;
+            navigator.clipboard.writeText(refLink).then(() => {
+                alert('✅ Ссылка скопирована!');
+            });
+        }
+
         // ОБНОВЛЕНИЕ ТАЙМЕРА БЕСПЛАТНОЙ ПРОКРУТКИ
         function updateFreeSpinTimer() {
             if (!userData.freeSpinAvailable && userData.freeSpinTime > 0) {
@@ -738,27 +773,31 @@
             }
         }
 
-        // ПОКАЗАТЬ РАЗДЕЛ
+        // ПОКАЗАТЬ РАЗДЕЛ - ФИКС НАВИГАЦИИ
         function showSection(sectionName) {
+            // Скрываем все разделы
             document.querySelectorAll('.content').forEach(section => {
                 section.style.display = 'none';
             });
             
-            document.getElementById(sectionName + 'Section').style.display = 'block';
+            // Показываем выбранный раздел
+            const targetSection = document.getElementById(sectionName + 'Section');
+            if (targetSection) {
+                targetSection.style.display = 'block';
+            }
             
+            // Обновляем активное меню
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.classList.remove('active');
             });
             
+            // Активируем правильную кнопку
             const menuItems = document.querySelectorAll('.nav-item');
-            const sectionIndex = ['roulettes', 'inventory', 'referral', 'shop'].indexOf(sectionName);
+            const sections = ['roulettes', 'inventory', 'referral', 'shop'];
+            const sectionIndex = sections.indexOf(sectionName);
+            
             if (sectionIndex !== -1 && menuItems[sectionIndex]) {
                 menuItems[sectionIndex].classList.add('active');
-            }
-            
-            // Обновляем реферальную ссылку
-            if (sectionName === 'referral') {
-                document.getElementById('refLink').textContent = `https://t.me/BlackRouletteBot?start=ref_${userId}`;
             }
         }
 
