@@ -4,7 +4,7 @@ import sqlite3
 import os
 import time
 
-BOT_TOKEN = os.getenv('BOT_TOKEN', '8052679500:AAFxiWMPFBYzZBxpagvvZ_v0XYhHnf98EOW')
+BOT_TOKEN = os.getenv('BOT_TOKEN', '8052679500:AAEobQqpYnUxbfATmWa1tBIN-LZClPOUCbw')
 
 # Инициализация БД
 def init_db():
