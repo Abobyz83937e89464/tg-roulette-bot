@@ -136,6 +136,25 @@
             font-weight: bold;
         }
         
+        /* PAYMENT BUTTON */
+        .payment-btn {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            border: none;
+            border-radius: 15px;
+            padding: 18px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 20px;
+            transition: all 0.2s ease;
+        }
+        
+        .payment-btn:active {
+            transform: scale(0.98);
+        }
+        
         /* HORIZONTAL ROULETTE */
         .roulette-section {
             background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
@@ -160,6 +179,7 @@
             overflow: hidden;
             border-radius: 10px;
             background: #000;
+            border: 2px solid #333;
         }
         
         .roulette-track {
@@ -168,7 +188,7 @@
             top: 0;
             left: 0;
             height: 100%;
-            transition: transform 4s cubic-bezier(0.2, 0.8, 0.3, 1);
+            transition: transform 6s cubic-bezier(0.1, 0.8, 0.2, 1); /* Увеличил время прокрутки */
         }
         
         .roulette-item {
@@ -182,6 +202,7 @@
             font-weight: bold;
             font-size: 12px;
             text-align: center;
+            padding: 5px;
         }
         
         .center-line {
@@ -193,7 +214,7 @@
             height: 100%;
             background: #ff4444;
             z-index: 10;
-            box-shadow: 0 0 10px rgba(255,0,0,0.5);
+            box-shadow: 0 0 15px rgba(255,0,0,0.7);
         }
         
         .spin-info {
@@ -327,12 +348,17 @@
         <div class="header">
             <div class="user-info">
                 <div class="user-name" id="userName">Player</div>
-                <div class="balance">⭐ <span id="balance">1,247</span></div>
+                <div class="balance">⭐ <span id="balance">50</span></div>
             </div>
         </div>
         
         <!-- MAIN CONTENT -->
         <div class="content">
+            <!-- PAYMENT -->
+            <button class="payment-btn" onclick="buyStars()">
+                💰 ПОПОЛНИТЬ БАЛАНС
+            </button>
+            
             <!-- STATS -->
             <div class="stats-grid">
                 <div class="stat-card">
@@ -395,7 +421,7 @@
                 </div>
                 
                 <button class="spin-btn" onclick="spinRoulette('stars')">
-                    КРУТИТЬ РУЛЕТКУ - 1 ⭐
+                    КРУТИТЬ РУЛЕТКУ - 10 ⭐
                 </button>
             </div>
             
@@ -413,7 +439,7 @@
                 </div>
                 
                 <button class="spin-btn" onclick="spinRoulette('nft')">
-                    КРУТИТЬ РУЛЕТКУ - 5 ⭐
+                    КРУТИТЬ РУЛЕТКУ - 50 ⭐
                 </button>
             </div>
             
@@ -426,7 +452,7 @@
                         <span class="prob-chance">50%</span>
                     </div>
                     <div class="prob-item">
-                        <span class="prob-name">20 звезд</span>
+                        <span class="prob-name">25 звезд</span>
                         <span class="prob-chance">30%</span>
                     </div>
                     <div class="prob-item">
@@ -440,24 +466,20 @@
                 </div>
                 <div class="prob-list" id="nftProb" style="display:none">
                     <div class="prob-item">
-                        <span class="prob-name">Moon NFT</span>
-                        <span class="prob-chance">50%</span>
+                        <span class="prob-name">Common NFT</span>
+                        <span class="prob-chance">60%</span>
                     </div>
                     <div class="prob-item">
-                        <span class="prob-name">CryptoPunk</span>
+                        <span class="prob-name">Rare NFT</span>
                         <span class="prob-chance">25%</span>
                     </div>
                     <div class="prob-item">
-                        <span class="prob-name">Telegram Whale</span>
-                        <span class="prob-chance">15%</span>
+                        <span class="prob-name">Epic NFT</span>
+                        <span class="prob-chance">12%</span>
                     </div>
                     <div class="prob-item">
-                        <span class="prob-name">LOL Pop NFT</span>
-                        <span class="prob-chance">8%</span>
-                    </div>
-                    <div class="prob-item">
-                        <span class="prob-name">Snoop Dogg NFT</span>
-                        <span class="prob-chance">2%</span>
+                        <span class="prob-name">Legendary NFT</span>
+                        <span class="prob-chance">3%</span>
                     </div>
                 </div>
             </div>
@@ -493,26 +515,42 @@
         const user = tg.initDataUnsafe.user;
         document.getElementById('userName').textContent = user?.first_name || 'Игрок';
         
-        // Roulette prizes
+        // Real NFT list
+        const REAL_NFT = [
+            { name: "Jingle Bells", value: "jingle_bells", probability: 0.15, color: "#FF6B6B", rarity: "COMMON", supply: "124,593" },
+            { name: "Eternal Candle", value: "eternal_candle", probability: 0.12, color: "#4ECDC4", rarity: "COMMON", supply: "46,590" },
+            { name: "Skull Flower", value: "skull_flower", probability: 0.08, color: "#FFD166", rarity: "RARE", supply: "24,126" },
+            { name: "Sakura Flower", value: "sakura_flower", probability: 0.14, color: "#FF69B4", rarity: "COMMON", supply: "93,115" },
+            { name: "Jelly Bunny", value: "jelly_bunny", probability: 0.16, color: "#9B59B6", rarity: "COMMON", supply: "129,350" },
+            { name: "Cupid Charm", value: "cupid_charm", probability: 0.07, color: "#E74C3C", rarity: "RARE", supply: "33,112" },
+            { name: "Hanging Star", value: "hanging_star", probability: 0.1, color: "#F1C40F", rarity: "COMMON", supply: "58,118" },
+            { name: "Easter Egg", value: "easter_egg", probability: 0.18, color: "#27AE60", rarity: "COMMON", supply: "173,176" },
+            { name: "Spy Agaric", value: "spy_agaric", probability: 0.13, color: "#D35400", rarity: "COMMON", supply: "89,438" },
+            { name: "Homemade Cake", value: "homemade_cake", probability: 0.2, color: "#8E44AD", rarity: "COMMON", supply: "199,482" },
+            { name: "Snow Globe", value: "snow_globe", probability: 0.11, color: "#3498DB", rarity: "COMMON", supply: "72,788" },
+            { name: "Xmas Stocking", value: "xmas_stocking", probability: 0.25, color: "#E74C3C", rarity: "COMMON", supply: "334,632" },
+            { name: "B-Day Candle", value: "bday_candle", probability: 0.23, color: "#F39C12", rarity: "COMMON", supply: "308,639" },
+            { name: "Candy Cane", value: "candy_cane", probability: 0.24, color: "#C0392B", rarity: "COMMON", supply: "320,622" },
+            { name: "Lush Bouquet", value: "lush_bouquet", probability: 0.14, color: "#2ECC71", rarity: "COMMON", supply: "140,116" },
+            { name: "Top Hat", value: "top_hat", probability: 0.06, color: "#2C3E50", rarity: "RARE", supply: "35,099" },
+            { name: "Scared Cat", value: "scared_cat", probability: 0.04, color: "#7F8C8D", rarity: "EPIC", supply: "19,289" },
+            { name: "Spiced Wine", value: "spiced_wine", probability: 0.15, color: "#8B4513", rarity: "COMMON", supply: "146,090" },
+            { name: "Evil Eye", value: "evil_eye", probability: 0.02, color: "#8E44AD", rarity: "LEGENDARY", supply: "10,000" }
+        ];
+        
         const STAR_PRIZES = [
             { name: "10 ⭐", value: 10, probability: 0.5, color: "#FF6B6B" },
-            { name: "20 ⭐", value: 20, probability: 0.3, color: "#4ECDC4" },
+            { name: "25 ⭐", value: 25, probability: 0.3, color: "#4ECDC4" },
             { name: "50 ⭐", value: 50, probability: 0.15, color: "#FFD166" },
             { name: "100 ⭐", value: 100, probability: 0.05, color: "#6A0572" }
         ];
         
-        const NFT_PRIZES = [
-            { name: "Moon 🌙", value: "moon", probability: 0.5, color: "#808080" },
-            { name: "CryptoPunk 👾", value: "cryptopunk", probability: 0.25, color: "#4169E1" },
-            { name: "TG Whale 🐋", value: "tg_whale", probability: 0.15, color: "#008000" },
-            { name: "LOL Pop 💜", value: "lol_pop", probability: 0.08, color: "#800080" },
-            { name: "Snoop Dogg 🐶", value: "snoop_dogg", probability: 0.02, color: "#FFD700" }
-        ];
+        let userBalance = 50;
         
         // Initialize roulettes
         function initRoulettes() {
             createRouletteTrack('starsTrack', STAR_PRIZES);
-            createRouletteTrack('nftTrack', NFT_PRIZES);
+            createRouletteTrack('nftTrack', REAL_NFT);
         }
         
         // Create horizontal roulette track
@@ -521,12 +559,12 @@
             track.innerHTML = '';
             
             // Create multiple copies for seamless scrolling
-            for (let copy = 0; copy < 3; copy++) {
+            for (let copy = 0; copy < 5; copy++) { // Увеличил количество копий для долгой прокрутки
                 prizes.forEach((prize, index) => {
                     const item = document.createElement('div');
                     item.className = 'roulette-item';
                     item.style.background = prize.color;
-                    item.textContent = prize.name;
+                    item.innerHTML = `<div>${prize.name}</div><small>${prize.supply || ''}</small>`;
                     track.appendChild(item);
                 });
             }
@@ -547,10 +585,40 @@
             document.getElementById('nftProb').style.display = type === 'nft' ? 'block' : 'none';
         }
         
+        // Buy stars function
+        function buyStars() {
+            const packages = [
+                { stars: 100, price: "₽99" },
+                { stars: 250, price: "₽199" },
+                { stars: 500, price: "₽399" },
+                { stars: 1000, price: "₽799" }
+            ];
+            
+            let message = "💰 ВЫБЕРИТЕ ПАКЕТ ЗВЁЗД:\n\n";
+            packages.forEach((pkg, index) => {
+                message += `${index + 1}. ${pkg.stars} ⭐ - ${pkg.price}\n`;
+            });
+            
+            alert(message + "\nДля пополнения напишите @YourBotName с выбранным пакетом");
+        }
+        
         // Spin roulette
         function spinRoulette(type) {
+            const cost = type === 'stars' ? 10 : 50;
+            
+            // Check balance
+            if (userBalance < cost) {
+                alert(`❌ Недостаточно звёзд! Нужно ${cost} ⭐`);
+                buyStars();
+                return;
+            }
+            
+            // Deduct cost
+            userBalance -= cost;
+            document.getElementById('balance').textContent = userBalance;
+            
             const track = document.getElementById(type + 'Track');
-            const prizes = type === 'stars' ? STAR_PRIZES : NFT_PRIZES;
+            const prizes = type === 'stars' ? STAR_PRIZES : REAL_NFT;
             
             // Reset animation
             track.style.transition = 'none';
@@ -559,25 +627,34 @@
             // Force reflow
             void track.offsetWidth;
             
-            // Spin animation
+            // Long spin animation
             const itemWidth = 100;
-            const itemsCount = prizes.length * 3;
-            const targetIndex = Math.floor(Math.random() * prizes.length) + prizes.length;
+            const itemsCount = prizes.length * 5;
+            const targetIndex = Math.floor(Math.random() * prizes.length) + (prizes.length * 2);
             const targetPosition = -(targetIndex * itemWidth) + (2 * itemWidth);
             
-            track.style.transition = 'transform 4s cubic-bezier(0.2, 0.8, 0.3, 1)';
+            track.style.transition = 'transform 6s cubic-bezier(0.1, 0.8, 0.2, 1)'; // Увеличил время до 6 секунд
             track.style.transform = `translateX(${targetPosition}px)`;
             
             // Determine result after spin
             setTimeout(() => {
                 const resultIndex = targetIndex % prizes.length;
                 const result = prizes[resultIndex];
-                alert(`🎉 Вы выиграли: ${result.name}!`);
-            }, 4000);
+                
+                if (type === 'stars') {
+                    // Add stars prize
+                    userBalance += result.value;
+                    document.getElementById('balance').textContent = userBalance;
+                    alert(`🎉 Вы выиграли: ${result.name}!`);
+                } else {
+                    // NFT prize
+                    alert(`🎉 Вы выиграли NFT: ${result.name} (${result.rarity})!\nВ наличии: ${result.supply} шт.`);
+                }
+            }, 6000);
         }
         
         // Initialize on load
         initRoulettes();
     </script>
 </body>
-    </html>
+</html>
