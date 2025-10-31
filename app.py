@@ -1,12 +1,12 @@
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes
 import sqlite3
 import os
 import time
 
-BOT_TOKEN = os.getenv('BOT_TOKEN', '8052679500:AAEobQqpYnUxbfATmWa1tBIN-LZClPOUCbw')
+BOT_TOKEN = os.getenv('BOT_TOKEN', '8052679500:AAFxiWMPFBYzZBxpagvvZ_v0XYhHnf98EOW')
+WEB_APP_URL = "https://raw.githack.com/Abobyz83937e89464/tg-roulette-bot/main/web_app/index.html"
 
-# Инициализация БД
 def init_db():
     conn = sqlite3.connect('users.db')
     c = conn.cursor()
@@ -39,12 +39,12 @@ def update_free_spin_time(user_id):
 
 def can_free_spin(user_id):
     user = get_user(user_id)
-    if not user or user[3] == 0:  # Первая бесплатная прокрутка
-        return True, 0
+    if not user or user[3] == 0:
+        return True, "00:00"
     else:
         time_passed = time.time() - user[3]
-        if time_passed >= 86400:  # 24 часа прошло
-            return True, 0
+        if time_passed >= 86400:
+            return True, "00:00"
         else:
             remaining = 86400 - time_passed
             hours = int(remaining // 3600)
@@ -56,7 +56,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = get_user(user_id)
     
     if not user:
-        # Создаем нового пользователя с балансом 50
         conn = sqlite3.connect('users.db')
         c = conn.cursor()
         c.execute("INSERT INTO users (user_id, username, stars, free_spin_time) VALUES (?, ?, ?, ?)", 
@@ -69,7 +68,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     free_spin_text = "✨ Доступно сейчас!" if can_spin else f"⏰ Через: {timer}"
     
     keyboard = [
-        [InlineKeyboardButton("🎰 Крутить рулетку", callback_data="spin")],
+        [InlineKeyboardButton("🎮 ОТКРЫТЬ РУЛЕТКУ", web_app=WebAppInfo(url=WEB_APP_URL))],
         [InlineKeyboardButton("💰 Мой баланс", callback_data="balance")],
         [InlineKeyboardButton("💫 Пополнить баланс", callback_data="deposit")]
     ]
@@ -79,7 +78,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"🎯 Добро пожаловать в Black Roulette!\n"
         f"💫 Ваш баланс: {user[2]} звезд\n"
         f"🎁 Бесплатная прокрутка: {free_spin_text}\n\n"
-        "Выберите действие:",
+        "Нажмите кнопку ниже чтобы открыть рулетку:",
         reply_markup=reply_markup
     )
 
@@ -100,19 +99,6 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "🎁 После команды киньте любой подарок или стикер!\n\n"
             "✅ Звёзды начислятся автоматически!"
         )
-    elif query.data == "spin":
-        can_spin, timer = can_free_spin(user_id)
-        if can_spin:
-            # Бесплатная прокрутка
-            update_free_spin_time(user_id)
-            await query.answer("🎰 Запускается бесплатная прокрутка!", show_alert=True)
-        else:
-            if user[2] >= 10:
-                new_balance = user[2] - 10
-                update_stars(user_id, new_balance)
-                await query.answer("🎰 Запускается прокрутка за 10 звезд!", show_alert=True)
-            else:
-                await query.answer("❌ Недостаточно звезд для прокрутки!", show_alert=True)
 
 if __name__ == '__main__':
     init_db()
