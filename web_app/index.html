@@ -165,7 +165,7 @@
             top: 0; 
             left: 0; 
             height: 100%; 
-            transition: transform 4s cubic-bezier(0.1, 0.8, 0.2, 1); 
+            transition: transform 10s cubic-bezier(0.1, 0.2, 0.8, 0.9); 
         }
         
         .roulette-item { 
@@ -414,25 +414,25 @@
                     <div class="prob-item"><span class="prob-name">100 звезд</span><span class="prob-chance">5%</span></div>
                 </div>
                 <div class="prob-list" id="nftProb" style="display:none">
-                    <div class="prob-item"><span class="prob-name">Jingle Bells</span><span class="prob-chance">15%</span></div>
-                    <div class="prob-item"><span class="prob-name">Eternal Candle</span><span class="prob-chance">12%</span></div>
-                    <div class="prob-item"><span class="prob-name">Skull Flower</span><span class="prob-chance">8%</span></div>
-                    <div class="prob-item"><span class="prob-name">Sakura Flower</span><span class="prob-chance">14%</span></div>
-                    <div class="prob-item"><span class="prob-name">Jelly Bunny</span><span class="prob-chance">16%</span></div>
-                    <div class="prob-item"><span class="prob-name">Cupid Charm</span><span class="prob-chance">7%</span></div>
-                    <div class="prob-item"><span class="prob-name">Hanging Star</span><span class="prob-chance">10%</span></div>
-                    <div class="prob-item"><span class="prob-name">Easter Egg</span><span class="prob-chance">18%</span></div>
-                    <div class="prob-item"><span class="prob-name">Spy Agaric</span><span class="prob-chance">13%</span></div>
-                    <div class="prob-item"><span class="prob-name">Homemade Cake</span><span class="prob-chance">20%</span></div>
-                    <div class="prob-item"><span class="prob-name">Snow Globe</span><span class="prob-chance">11%</span></div>
-                    <div class="prob-item"><span class="prob-name">Xmas Stocking</span><span class="prob-chance">25%</span></div>
-                    <div class="prob-item"><span class="prob-name">B-Day Candle</span><span class="prob-chance">23%</span></div>
-                    <div class="prob-item"><span class="prob-name">Candy Cane</span><span class="prob-chance">24%</span></div>
-                    <div class="prob-item"><span class="prob-name">Lush Bouquet</span><span class="prob-chance">14%</span></div>
-                    <div class="prob-item"><span class="prob-name">Top Hat</span><span class="prob-chance">6%</span></div>
-                    <div class="prob-item"><span class="prob-name">Scared Cat</span><span class="prob-chance">4%</span></div>
-                    <div class="prob-item"><span class="prob-name">Spiced Wine</span><span class="prob-chance">15%</span></div>
-                    <div class="prob-item"><span class="prob-name">Evil Eye</span><span class="prob-chance">2%</span></div>
+                    <div class="prob-item"><span class="prob-name">Jingle Bells</span><span class="prob-chance">10%</span></div>
+                    <div class="prob-item"><span class="prob-name">Eternal Candle</span><span class="prob-chance">8%</span></div>
+                    <div class="prob-item"><span class="prob-name">Skull Flower</span><span class="prob-chance">6%</span></div>
+                    <div class="prob-item"><span class="prob-name">Sakura Flower</span><span class="prob-chance">9%</span></div>
+                    <div class="prob-item"><span class="prob-name">Jelly Bunny</span><span class="prob-chance">11%</span></div>
+                    <div class="prob-item"><span class="prob-name">Cupid Charm</span><span class="prob-chance">5%</span></div>
+                    <div class="prob-item"><span class="prob-name">Hanging Star</span><span class="prob-chance">7%</span></div>
+                    <div class="prob-item"><span class="prob-name">Easter Egg</span><span class="prob-chance">12%</span></div>
+                    <div class="prob-item"><span class="prob-name">Spy Agaric</span><span class="prob-chance">8%</span></div>
+                    <div class="prob-item"><span class="prob-name">Homemade Cake</span><span class="prob-chance">13%</span></div>
+                    <div class="prob-item"><span class="prob-name">Snow Globe</span><span class="prob-chance">7%</span></div>
+                    <div class="prob-item"><span class="prob-name">Xmas Stocking</span><span class="prob-chance">15%</span></div>
+                    <div class="prob-item"><span class="prob-name">B-Day Candle</span><span class="prob-chance">14%</span></div>
+                    <div class="prob-item"><span class="prob-name">Candy Cane</span><span class="prob-chance">16%</span></div>
+                    <div class="prob-item"><span class="prob-name">Lush Bouquet</span><span class="prob-chance">9%</span></div>
+                    <div class="prob-item"><span class="prob-name">Top Hat</span><span class="prob-chance">4%</span></div>
+                    <div class="prob-item"><span class="prob-name">Scared Cat</span><span class="prob-chance">3%</span></div>
+                    <div class="prob-item"><span class="prob-name">Spiced Wine</span><span class="prob-chance">10%</span></div>
+                    <div class="prob-item"><span class="prob-name">Evil Eye</span><span class="prob-chance">1%</span></div>
                 </div>
             </div>
         </div>
@@ -547,27 +547,27 @@
             { name: "100 ⭐", value: 100, probability: 0.05, color: "#6A0572" }
         ];
         
-        // ВАШ РЕАЛЬНЫЙ СПИСОК NFT
+        // ВАШ РЕАЛЬНЫЙ СПИСОК NFT С ПРАВИЛЬНЫМИ ШАНСАМИ
         const NFT_PRIZES = [
-            { name: "Jingle Bells", value: "jingle_bells", probability: 0.15, color: "#FF6B6B", rarity: "COMMON", supply: "124,593" },
-            { name: "Eternal Candle", value: "eternal_candle", probability: 0.12, color: "#4ECDC4", rarity: "COMMON", supply: "46,590" },
-            { name: "Skull Flower", value: "skull_flower", probability: 0.08, color: "#FFD166", rarity: "RARE", supply: "24,126" },
-            { name: "Sakura Flower", value: "sakura_flower", probability: 0.14, color: "#FF69B4", rarity: "COMMON", supply: "93,115" },
-            { name: "Jelly Bunny", value: "jelly_bunny", probability: 0.16, color: "#9B59B6", rarity: "COMMON", supply: "129,350" },
-            { name: "Cupid Charm", value: "cupid_charm", probability: 0.07, color: "#E74C3C", rarity: "RARE", supply: "33,112" },
-            { name: "Hanging Star", value: "hanging_star", probability: 0.1, color: "#F1C40F", rarity: "COMMON", supply: "58,118" },
-            { name: "Easter Egg", value: "easter_egg", probability: 0.18, color: "#27AE60", rarity: "COMMON", supply: "173,176" },
-            { name: "Spy Agaric", value: "spy_agaric", probability: 0.13, color: "#D35400", rarity: "COMMON", supply: "89,438" },
-            { name: "Homemade Cake", value: "homemade_cake", probability: 0.2, color: "#8E44AD", rarity: "COMMON", supply: "199,482" },
-            { name: "Snow Globe", value: "snow_globe", probability: 0.11, color: "#3498DB", rarity: "COMMON", supply: "72,788" },
-            { name: "Xmas Stocking", value: "xmas_stocking", probability: 0.25, color: "#E74C3C", rarity: "COMMON", supply: "334,632" },
-            { name: "B-Day Candle", value: "bday_candle", probability: 0.23, color: "#F39C12", rarity: "COMMON", supply: "308,639" },
-            { name: "Candy Cane", value: "candy_cane", probability: 0.24, color: "#C0392B", rarity: "COMMON", supply: "320,622" },
-            { name: "Lush Bouquet", value: "lush_bouquet", probability: 0.14, color: "#2ECC71", rarity: "COMMON", supply: "140,116" },
-            { name: "Top Hat", value: "top_hat", probability: 0.06, color: "#2C3E50", rarity: "RARE", supply: "35,099" },
-            { name: "Scared Cat", value: "scared_cat", probability: 0.04, color: "#7F8C8D", rarity: "EPIC", supply: "19,289" },
-            { name: "Spiced Wine", value: "spiced_wine", probability: 0.15, color: "#8B4513", rarity: "COMMON", supply: "146,090" },
-            { name: "Evil Eye", value: "evil_eye", probability: 0.02, color: "#8E44AD", rarity: "LEGENDARY", supply: "10,000" }
+            { name: "Jingle Bells", value: "jingle_bells", probability: 0.10, color: "#FF6B6B", rarity: "COMMON", supply: "124,593" },
+            { name: "Eternal Candle", value: "eternal_candle", probability: 0.08, color: "#4ECDC4", rarity: "COMMON", supply: "46,590" },
+            { name: "Skull Flower", value: "skull_flower", probability: 0.06, color: "#FFD166", rarity: "RARE", supply: "24,126" },
+            { name: "Sakura Flower", value: "sakura_flower", probability: 0.09, color: "#FF69B4", rarity: "COMMON", supply: "93,115" },
+            { name: "Jelly Bunny", value: "jelly_bunny", probability: 0.11, color: "#9B59B6", rarity: "COMMON", supply: "129,350" },
+            { name: "Cupid Charm", value: "cupid_charm", probability: 0.05, color: "#E74C3C", rarity: "RARE", supply: "33,112" },
+            { name: "Hanging Star", value: "hanging_star", probability: 0.07, color: "#F1C40F", rarity: "COMMON", supply: "58,118" },
+            { name: "Easter Egg", value: "easter_egg", probability: 0.12, color: "#27AE60", rarity: "COMMON", supply: "173,176" },
+            { name: "Spy Agaric", value: "spy_agaric", probability: 0.08, color: "#D35400", rarity: "COMMON", supply: "89,438" },
+            { name: "Homemade Cake", value: "homemade_cake", probability: 0.13, color: "#8E44AD", rarity: "COMMON", supply: "199,482" },
+            { name: "Snow Globe", value: "snow_globe", probability: 0.07, color: "#3498DB", rarity: "COMMON", supply: "72,788" },
+            { name: "Xmas Stocking", value: "xmas_stocking", probability: 0.15, color: "#E74C3C", rarity: "COMMON", supply: "334,632" },
+            { name: "B-Day Candle", value: "bday_candle", probability: 0.14, color: "#F39C12", rarity: "COMMON", supply: "308,639" },
+            { name: "Candy Cane", value: "candy_cane", probability: 0.16, color: "#C0392B", rarity: "COMMON", supply: "320,622" },
+            { name: "Lush Bouquet", value: "lush_bouquet", probability: 0.09, color: "#2ECC71", rarity: "COMMON", supply: "140,116" },
+            { name: "Top Hat", value: "top_hat", probability: 0.04, color: "#2C3E50", rarity: "RARE", supply: "35,099" },
+            { name: "Scared Cat", value: "scared_cat", probability: 0.03, color: "#7F8C8D", rarity: "EPIC", supply: "19,289" },
+            { name: "Spiced Wine", value: "spiced_wine", probability: 0.10, color: "#8B4513", rarity: "COMMON", supply: "146,090" },
+            { name: "Evil Eye", value: "evil_eye", probability: 0.01, color: "#8E44AD", rarity: "LEGENDARY", supply: "10,000" }
         ];
         
         let userBalance = 50;
@@ -694,7 +694,8 @@
             const targetIndex = Math.floor(Math.random() * prizes.length) + (prizes.length * 2);
             const targetPosition = -(targetIndex * itemWidth) + (2 * itemWidth);
             
-            track.style.transition = 'transform 4s cubic-bezier(0.1, 0.8, 0.2, 1)';
+            // ДОЛГАЯ И БЫСТРАЯ АНИМАЦИЯ - 10 СЕКУНД
+            track.style.transition = 'transform 10s cubic-bezier(0.1, 0.2, 0.8, 0.9)';
             track.style.transform = `translateX(${targetPosition}px)`;
             
             setTimeout(() => {
@@ -713,7 +714,7 @@
                 spinBtn.disabled = false;
                 spinBtn.textContent = type === 'free' ? "КРУТИТЬ БЕСПЛАТНО" : `КРУТИТЬ - ${cost} ⭐`;
                 
-            }, 4000);
+            }, 10000); // 10 СЕКУНД
         }
         
         // РЕАЛЬНЫЙ ТАЙМЕР 24 ЧАСА
