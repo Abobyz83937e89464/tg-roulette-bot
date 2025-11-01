@@ -147,7 +147,7 @@
         /* ROULETTE TABS */
         .roulette-tabs { 
             display: grid; 
-            grid-template-columns: 1fr 1fr 1fr; 
+            grid-template-columns: 1fr 1fr; 
             gap: 8px; 
             margin-bottom: 15px; 
         }
@@ -368,6 +368,17 @@
             color: #666;
         }
 
+        .sell-btn {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            border: none;
+            border-radius: 8px;
+            padding: 8px 12px;
+            color: white;
+            font-size: 12px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
         .copy-btn {
             background: linear-gradient(135deg, #3498db, #2980b9);
             border: none;
@@ -420,34 +431,17 @@
                 </button>
             </div>
             
-            <!-- 3 РУЛЕТКИ -->
+            <!-- 2 РУЛЕТКИ -->
             <div class="roulette-tabs">
-                <button class="tab-btn active" onclick="switchRoulette('free')">🎁 БЕСПЛАТНАЯ</button>
-                <button class="tab-btn" onclick="switchRoulette('stars')">⭐ ЗВЁЗДЫ</button>
-                <button class="tab-btn" onclick="switchRoulette('nft')">🎨 NFT</button>
-            </div>
-            
-            <!-- БЕСПЛАТНАЯ РУЛЕТКА -->
-            <div class="roulette-section" id="freeRoulette">
-                <div class="section-title">🎁 БЕСПЛАТНАЯ РУЛЕТКА</div>
-                <div class="spin-info">
-                    <div class="free-spin" id="freeSpinText">✨ Доступно сейчас!</div>
-                    <div class="timer">⏰ Следующая через: <span id="freeTimer">24:00:00</span></div>
-                </div>
-                
-                <div class="horizontal-roulette">
-                    <div class="center-line"></div>
-                    <div class="roulette-track" id="freeTrack"></div>
-                </div>
-                
-                <button class="spin-btn" id="freeSpinBtn" onclick="spinRoulette('free')">КРУТИТЬ БЕСПЛАТНО</button>
+                <button class="tab-btn active" onclick="switchRoulette('stars')">⭐ ЗВЁЗДЫ</button>
+                <button class="tab-btn" onclick="switchRoulette('nft')">🎨 NFT + ЗВЁЗДЫ</button>
             </div>
             
             <!-- РУЛЕТКА ЗВЁЗД -->
-            <div class="roulette-section" id="starsRoulette" style="display:none">
+            <div class="roulette-section" id="starsRoulette">
                 <div class="section-title">⭐ РУЛЕТКА ЗВЁЗД</div>
                 <div class="spin-info">
-                    <div class="free-spin">💫 Крути за звёзды!</div>
+                    <div class="free-spin">💫 Только звёзды!</div>
                 </div>
                 
                 <div class="horizontal-roulette">
@@ -462,7 +456,7 @@
             <div class="roulette-section" id="nftRoulette" style="display:none">
                 <div class="section-title">🎨 NFT РУЛЕТКА</div>
                 <div class="spin-info">
-                    <div class="free-spin">🔥 Редкие NFT!</div>
+                    <div class="free-spin">🔥 Редкие NFT + звёзды!</div>
                 </div>
                 
                 <div class="horizontal-roulette">
@@ -476,39 +470,34 @@
             <!-- ШАНСЫ -->
             <div class="probabilities">
                 <div class="prob-title">🎯 ШАНСЫ ВЫИГРЫША</div>
-                <div class="prob-list" id="freeProb">
-                    <div class="prob-item"><span class="prob-name">1 звезда</span><span class="prob-chance">40%</span></div>
-                    <div class="prob-item"><span class="prob-name">5 звезд</span><span class="prob-chance">30%</span></div>
-                    <div class="prob-item"><span class="prob-name">10 звезд</span><span class="prob-chance">20%</span></div>
-                    <div class="prob-item"><span class="prob-name">Common NFT</span><span class="prob-chance">8%</span></div>
-                    <div class="prob-item"><span class="prob-name">Rare NFT</span><span class="prob-chance">2%</span></div>
-                </div>
-                <div class="prob-list" id="starsProb" style="display:none">
-                    <div class="prob-item"><span class="prob-name">10 звезд</span><span class="prob-chance">50%</span></div>
-                    <div class="prob-item"><span class="prob-name">25 звезд</span><span class="prob-chance">30%</span></div>
-                    <div class="prob-item"><span class="prob-name">50 звезд</span><span class="prob-chance">15%</span></div>
-                    <div class="prob-item"><span class="prob-name">100 звезд</span><span class="prob-chance">5%</span></div>
+                <div class="prob-list" id="starsProb">
+                    <div class="prob-item"><span class="prob-name">10 звезд</span><span class="prob-chance">80%</span></div>
+                    <div class="prob-item"><span class="prob-name">15 звезд</span><span class="prob-chance">60%</span></div>
+                    <div class="prob-item"><span class="prob-name">25 звезд</span><span class="prob-chance">40%</span></div>
+                    <div class="prob-item"><span class="prob-name">50 звезд</span><span class="prob-chance">20%</span></div>
+                    <div class="prob-item"><span class="prob-name">100 звезд</span><span class="prob-chance">10%</span></div>
                 </div>
                 <div class="prob-list" id="nftProb" style="display:none">
-                    <div class="prob-item"><span class="prob-name">Jingle Bells</span><span class="prob-chance">10%</span></div>
-                    <div class="prob-item"><span class="prob-name">Eternal Candle</span><span class="prob-chance">8%</span></div>
-                    <div class="prob-item"><span class="prob-name">Skull Flower</span><span class="prob-chance">6%</span></div>
-                    <div class="prob-item"><span class="prob-name">Sakura Flower</span><span class="prob-chance">9%</span></div>
-                    <div class="prob-item"><span class="prob-name">Jelly Bunny</span><span class="prob-chance">11%</span></div>
-                    <div class="prob-item"><span class="prob-name">Cupid Charm</span><span class="prob-chance">5%</span></div>
-                    <div class="prob-item"><span class="prob-name">Hanging Star</span><span class="prob-chance">7%</span></div>
-                    <div class="prob-item"><span class="prob-name">Easter Egg</span><span class="prob-chance">12%</span></div>
-                    <div class="prob-item"><span class="prob-name">Spy Agaric</span><span class="prob-chance">8%</span></div>
-                    <div class="prob-item"><span class="prob-name">Homemade Cake</span><span class="prob-chance">13%</span></div>
-                    <div class="prob-item"><span class="prob-name">Snow Globe</span><span class="prob-chance">7%</span></div>
-                    <div class="prob-item"><span class="prob-name">Xmas Stocking</span><span class="prob-chance">15%</span></div>
-                    <div class="prob-item"><span class="prob-name">B-Day Candle</span><span class="prob-chance">14%</span></div>
-                    <div class="prob-item"><span class="prob-name">Candy Cane</span><span class="prob-chance">16%</span></div>
-                    <div class="prob-item"><span class="prob-name">Lush Bouquet</span><span class="prob-chance">9%</span></div>
-                    <div class="prob-item"><span class="prob-name">Top Hat</span><span class="prob-chance">4%</span></div>
-                    <div class="prob-item"><span class="prob-name">Scared Cat</span><span class="prob-chance">3%</span></div>
-                    <div class="prob-item"><span class="prob-name">Spiced Wine</span><span class="prob-chance">10%</span></div>
-                    <div class="prob-item"><span class="prob-name">Evil Eye</span><span class="prob-chance">1%</span></div>
+                    <div class="prob-item"><span class="prob-name">10 звезд</span><span class="prob-chance">60%</span></div>
+                    <div class="prob-item"><span class="prob-name">25 звезд</span><span class="prob-chance">30%</span></div>
+                    <div class="prob-item"><span class="prob-name">Jingle Bells</span><span class="prob-chance">5%</span></div>
+                    <div class="prob-item"><span class="prob-name">Eternal Candle</span><span class="prob-chance">4%</span></div>
+                    <div class="prob-item"><span class="prob-name">Skull Flower</span><span class="prob-chance">7%</span></div>
+                    <div class="prob-item"><span class="prob-name">Sakura Flower</span><span class="prob-chance">2%</span></div>
+                    <div class="prob-item"><span class="prob-name">Jelly Bunny</span><span class="prob-chance">1.5%</span></div>
+                    <div class="prob-item"><span class="prob-name">Cupid Charm</span><span class="prob-chance">0.3%</span></div>
+                    <div class="prob-item"><span class="prob-name">Easter Egg</span><span class="prob-chance">0.8%</span></div>
+                    <div class="prob-item"><span class="prob-name">Spy Agaric</span><span class="prob-chance">0.5%</span></div>
+                    <div class="prob-item"><span class="prob-name">Homemade Cake</span><span class="prob-chance">8%</span></div>
+                    <div class="prob-item"><span class="prob-name">Restless Jar</span><span class="prob-chance">4%</span></div>
+                    <div class="prob-item"><span class="prob-name">Xmas Stocking</span><span class="prob-chance">5%</span></div>
+                    <div class="prob-item"><span class="prob-name">B-Day Candle</span><span class="prob-chance">8%</span></div>
+                    <div class="prob-item"><span class="prob-name">Candy Cane</span><span class="prob-chance">6%</span></div>
+                    <div class="prob-item"><span class="prob-name">Lush Bouquet</span><span class="prob-chance">1.2%</span></div>
+                    <div class="prob-item"><span class="prob-name">Top Hat</span><span class="prob-chance">0.08%</span></div>
+                    <div class="prob-item"><span class="prob-name">Scared Cat</span><span class="prob-chance">0.01%</span></div>
+                    <div class="prob-item"><span class="prob-name">Spiced Wine</span><span class="prob-chance">4%</span></div>
+                    <div class="prob-item"><span class="prob-name">Evil Eye</span><span class="prob-chance">1.2%</span></div>
                 </div>
             </div>
         </div>
@@ -609,50 +598,45 @@
         const userId = user?.id || Math.random().toString(36).substr(2, 9);
         document.getElementById('userName').textContent = user?.first_name || 'Игрок';
         
-        // ПРИЗЫ ДЛЯ 3 РУЛЕТОК
-        const FREE_PRIZES = [
-            { name: "1 ⭐", value: 1, probability: 0.4, color: "#FF6B6B" },
-            { name: "5 ⭐", value: 5, probability: 0.3, color: "#4ECDC4" },
-            { name: "10 ⭐", value: 10, probability: 0.2, color: "#FFD166" },
-            { name: "Common NFT", value: "common_nft", probability: 0.08, color: "#808080" },
-            { name: "Rare NFT", value: "rare_nft", probability: 0.02, color: "#008000" }
-        ];
-        
+        // РУЛЕТКА ЗВЁЗД
         const STAR_PRIZES = [
-            { name: "10 ⭐", value: 10, probability: 0.5, color: "#FF6B6B" },
-            { name: "25 ⭐", value: 25, probability: 0.3, color: "#4ECDC4" },
-            { name: "50 ⭐", value: 50, probability: 0.15, color: "#FFD166" },
-            { name: "100 ⭐", value: 100, probability: 0.05, color: "#6A0572" }
+            { name: "10 ⭐", value: 10, probability: 0.8, color: "#FF6B6B" },
+            { name: "15 ⭐", value: 15, probability: 0.6, color: "#4ECDC4" },
+            { name: "25 ⭐", value: 25, probability: 0.4, color: "#FFD166" },
+            { name: "50 ⭐", value: 50, probability: 0.2, color: "#6A0572" },
+            { name: "100 ⭐", value: 100, probability: 0.1, color: "#FF69B4" }
         ];
         
-        // ВАШ РЕАЛЬНЫЙ СПИСОК NFT
+        // NFT РУЛЕТКА
         const NFT_PRIZES = [
-            { name: "Jingle Bells", value: "jingle_bells", probability: 0.10, color: "#FF6B6B", rarity: "COMMON", supply: "124,593" },
-            { name: "Eternal Candle", value: "eternal_candle", probability: 0.08, color: "#4ECDC4", rarity: "COMMON", supply: "46,590" },
-            { name: "Skull Flower", value: "skull_flower", probability: 0.06, color: "#FFD166", rarity: "RARE", supply: "24,126" },
-            { name: "Sakura Flower", value: "sakura_flower", probability: 0.09, color: "#FF69B4", rarity: "COMMON", supply: "93,115" },
-            { name: "Jelly Bunny", value: "jelly_bunny", probability: 0.11, color: "#9B59B6", rarity: "COMMON", supply: "129,350" },
-            { name: "Cupid Charm", value: "cupid_charm", probability: 0.05, color: "#E74C3C", rarity: "RARE", supply: "33,112" },
-            { name: "Hanging Star", value: "hanging_star", probability: 0.07, color: "#F1C40F", rarity: "COMMON", supply: "58,118" },
-            { name: "Easter Egg", value: "easter_egg", probability: 0.12, color: "#27AE60", rarity: "COMMON", supply: "173,176" },
-            { name: "Spy Agaric", value: "spy_agaric", probability: 0.08, color: "#D35400", rarity: "COMMON", supply: "89,438" },
-            { name: "Homemade Cake", value: "homemade_cake", probability: 0.13, color: "#8E44AD", rarity: "COMMON", supply: "199,482" },
-            { name: "Snow Globe", value: "snow_globe", probability: 0.07, color: "#3498DB", rarity: "COMMON", supply: "72,788" },
-            { name: "Xmas Stocking", value: "xmas_stocking", probability: 0.15, color: "#E74C3C", rarity: "COMMON", supply: "334,632" },
-            { name: "B-Day Candle", value: "bday_candle", probability: 0.14, color: "#F39C12", rarity: "COMMON", supply: "308,639" },
-            { name: "Candy Cane", value: "candy_cane", probability: 0.16, color: "#C0392B", rarity: "COMMON", supply: "320,622" },
-            { name: "Lush Bouquet", value: "lush_bouquet", probability: 0.09, color: "#2ECC71", rarity: "COMMON", supply: "140,116" },
-            { name: "Top Hat", value: "top_hat", probability: 0.04, color: "#2C3E50", rarity: "RARE", supply: "35,099" },
-            { name: "Scared Cat", value: "scared_cat", probability: 0.03, color: "#7F8C8D", rarity: "EPIC", supply: "19,289" },
-            { name: "Spiced Wine", value: "spiced_wine", probability: 0.10, color: "#8B4513", rarity: "COMMON", supply: "146,090" },
-            { name: "Evil Eye", value: "evil_eye", probability: 0.01, color: "#8E44AD", rarity: "LEGENDARY", supply: "10,000" }
+            // ЗВЁЗДЫ
+            { name: "10 ⭐", value: 10, probability: 0.6, color: "#FF6B6B", type: "stars" },
+            { name: "25 ⭐", value: 25, probability: 0.3, color: "#4ECDC4", type: "stars" },
+            
+            // NFT
+            { name: "Jingle Bells", value: 200, probability: 0.05, color: "#FF6B6B", type: "nft", supply: "124,593" },
+            { name: "Eternal Candle", value: 200, probability: 0.04, color: "#4ECDC4", type: "nft", supply: "46,590" },
+            { name: "Skull Flower", value: 150, probability: 0.07, color: "#FFD166", type: "nft", supply: "24,126" },
+            { name: "Sakura Flower", value: 600, probability: 0.02, color: "#FF69B4", type: "nft", supply: "93,115" },
+            { name: "Jelly Bunny", value: 700, probability: 0.015, color: "#9B59B6", type: "nft", supply: "129,350" },
+            { name: "Cupid Charm", value: 2000, probability: 0.003, color: "#E74C3C", type: "nft", supply: "33,112" },
+            { name: "Easter Egg", value: 450, probability: 0.008, color: "#27AE60", type: "nft", supply: "173,176" },
+            { name: "Spy Agaric", value: 700, probability: 0.005, color: "#D35400", type: "nft", supply: "89,438" },
+            { name: "Homemade Cake", value: 300, probability: 0.08, color: "#8E44AD", type: "nft", supply: "199,482" },
+            { name: "Restless Jar", value: 350, probability: 0.04, color: "#3498DB", type: "nft", supply: "50,000" },
+            { name: "Xmas Stocking", value: 274, probability: 0.05, color: "#E74C3C", type: "nft", supply: "334,632" },
+            { name: "B-Day Candle", value: 200, probability: 0.08, color: "#F39C12", type: "nft", supply: "308,639" },
+            { name: "Candy Cane", value: 270, probability: 0.06, color: "#C0392B", type: "nft", supply: "320,622" },
+            { name: "Lush Bouquet", value: 500, probability: 0.012, color: "#2ECC71", type: "nft", supply: "140,116" },
+            { name: "Top Hat", value: 1300, probability: 0.0008, color: "#2C3E50", type: "nft", supply: "35,099" },
+            { name: "Scared Cat", value: 8000, probability: 0.0001, color: "#7F8C8D", type: "nft", supply: "19,289" },
+            { name: "Spiced Wine", value: 300, probability: 0.04, color: "#8B4513", type: "nft", supply: "146,090" },
+            { name: "Evil Eye", value: 600, probability: 0.012, color: "#8E44AD", type: "nft", supply: "10,000" }
         ];
         
         // ДАННЫЕ ПОЛЬЗОВАТЕЛЯ
         let userData = {
             balance: 50,
-            freeSpinAvailable: true,
-            freeSpinTime: 0,
             spinCount: 0,
             totalWin: 0,
             refCount: 0,
@@ -662,7 +646,6 @@
         };
         
         let isSpinning = false;
-        let freeSpinTimer = null;
 
         // ГЕНЕРАЦИЯ УНИКАЛЬНОГО REF CODE
         function generateRefCode() {
@@ -700,7 +683,6 @@
                         user_id: userId,
                         username: user?.first_name || 'Игрок',
                         balance: userData.balance,
-                        free_spin_time: userData.freeSpinTime,
                         spin_count: userData.spinCount,
                         total_win: userData.totalWin,
                         ref_count: userData.refCount,
@@ -734,9 +716,6 @@
             
             // Обновляем инвентарь
             updateInventory();
-            
-            // Обновляем таймер
-            updateFreeSpinTimer();
         }
 
         // ОБНОВЛЕНИЕ ИНВЕНТАРЯ
@@ -761,19 +740,39 @@
             
             // Создаем элементы инвентаря
             Object.entries(nftCounts).forEach(([nftName, count]) => {
-                const nft = NFT_PRIZES.find(item => item.name === nftName);
+                const nft = NFT_PRIZES.find(item => item.name === nftName && item.type === "nft");
                 if (nft) {
                     const item = document.createElement('div');
                     item.className = 'inventory-item';
                     item.innerHTML = `
                         <div class="inventory-title">${nft.name} ×${count}</div>
-                        <div class="inventory-rarity">Редкость: ${nft.rarity}</div>
                         <div class="inventory-supply">Всего: ${nft.supply} шт.</div>
+                        <div style="color: #FFD700; font-weight: bold; margin: 5px 0;">Цена продажи: ${nft.value} ⭐</div>
+                        <button class="sell-btn" onclick="sellNFT('${nft.name}')">💰 ПРОДАТЬ</button>
                     `;
                     item.style.borderLeft = `4px solid ${nft.color}`;
                     inventoryList.appendChild(item);
                 }
             });
+        }
+
+        // ПРОДАЖА NFT
+        async function sellNFT(nftName) {
+            const nft = NFT_PRIZES.find(item => item.name === nftName && item.type === "nft");
+            if (!nft) return;
+            
+            if (confirm(`Продать "${nftName}" за ${nft.value} ⭐?`)) {
+                // Находим и удаляем первый NFT с таким названием
+                const nftIndex = userData.inventory.findIndex(item => item.name === nftName);
+                if (nftIndex !== -1) {
+                    userData.inventory.splice(nftIndex, 1);
+                    userData.balance += nft.value;
+                    
+                    await saveUserData();
+                    updateUI();
+                    alert(`✅ Вы продали "${nftName}" за ${nft.value} ⭐!`);
+                }
+            }
         }
 
         // КОПИРОВАНИЕ РЕФЕРАЛЬНОЙ ССЫЛКИ
@@ -784,43 +783,21 @@
             });
         }
 
-        // ОБНОВЛЕНИЕ ТАЙМЕРА БЕСПЛАТНОЙ ПРОКРУТКИ
-        function updateFreeSpinTimer() {
-            if (!userData.freeSpinAvailable && userData.freeSpinTime > 0) {
-                const timePassed = Date.now() - userData.freeSpinTime;
-                const timeLeft = Math.max(0, 86400000 - timePassed); // 24 часа
-                
-                if (timeLeft <= 0) {
-                    userData.freeSpinAvailable = true;
-                    userData.freeSpinTime = 0;
-                    document.getElementById('freeSpinText').textContent = "✨ Доступно сейчас!";
-                    document.getElementById('freeTimer').textContent = "00:00:00";
-                    saveUserData();
-                } else {
-                    startRealTimer(timeLeft);
-                }
-            }
-        }
-
-        // ПОКАЗАТЬ РАЗДЕЛ - ФИКС НАВИГАЦИИ
+        // ПОКАЗАТЬ РАЗДЕЛ
         function showSection(sectionName) {
-            // Скрываем все разделы
             document.querySelectorAll('.content').forEach(section => {
                 section.style.display = 'none';
             });
             
-            // Показываем выбранный раздел
             const targetSection = document.getElementById(sectionName + 'Section');
             if (targetSection) {
                 targetSection.style.display = 'block';
             }
             
-            // Обновляем активное меню
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.classList.remove('active');
             });
             
-            // Активируем правильную кнопку
             const menuItems = document.querySelectorAll('.nav-item');
             const sections = ['roulettes', 'inventory', 'referral', 'shop'];
             const sectionIndex = sections.indexOf(sectionName);
@@ -846,7 +823,6 @@
         }
         
         function initRoulettes() {
-            createRouletteTrack('freeTrack', FREE_PRIZES);
             createRouletteTrack('starsTrack', STAR_PRIZES);
             createRouletteTrack('nftTrack', NFT_PRIZES);
         }
@@ -869,11 +845,9 @@
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
             
-            document.getElementById('freeRoulette').style.display = type === 'free' ? 'block' : 'none';
             document.getElementById('starsRoulette').style.display = type === 'stars' ? 'block' : 'none';
             document.getElementById('nftRoulette').style.display = type === 'nft' ? 'block' : 'none';
             
-            document.getElementById('freeProb').style.display = type === 'free' ? 'block' : 'none';
             document.getElementById('starsProb').style.display = type === 'stars' ? 'block' : 'none';
             document.getElementById('nftProb').style.display = type === 'nft' ? 'block' : 'none';
         }
@@ -884,17 +858,12 @@
                 return;
             }
             
-            const cost = type === 'free' ? 0 : (type === 'stars' ? 10 : 50);
-            const isFree = type === 'free';
+            const cost = type === 'stars' ? 10 : 50;
+            const prizes = type === 'stars' ? STAR_PRIZES : NFT_PRIZES;
             
-            if (!isFree && userData.balance < cost) {
+            if (userData.balance < cost) {
                 alert(`❌ Недостаточно звёзд! Нужно ${cost} ⭐`);
                 showDepositInstructions();
-                return;
-            }
-            
-            if (isFree && !userData.freeSpinAvailable) {
-                alert("❌ Бесплатная прокрутка уже использована! Ждите 24 часа.");
                 return;
             }
             
@@ -903,17 +872,9 @@
             spinBtn.disabled = true;
             spinBtn.textContent = "🌀 КРУТИМ...";
             
-            if (!isFree) {
-                userData.balance -= cost;
-            } else {
-                userData.freeSpinAvailable = false;
-                userData.freeSpinTime = Date.now();
-                document.getElementById('freeSpinText').textContent = "⏳ Использовано";
-                startRealTimer(86400000); // 24 часа
-            }
+            userData.balance -= cost;
             
             const track = document.getElementById(type + 'Track');
-            const prizes = type === 'free' ? FREE_PRIZES : (type === 'stars' ? STAR_PRIZES : NFT_PRIZES);
             
             track.style.transition = 'none';
             track.style.transform = 'translateX(0)';
@@ -923,7 +884,6 @@
             const targetIndex = Math.floor(Math.random() * prizes.length) + (prizes.length * 2);
             const targetPosition = -(targetIndex * itemWidth) + (2 * itemWidth);
             
-            // ОДИНАКОВАЯ СКОРОСТЬ ДЛЯ ВСЕХ РУЛЕТОК - 10 СЕКУНД
             track.style.transition = 'transform 10s cubic-bezier(0.1, 0.2, 0.8, 0.9)';
             track.style.transform = `translateX(${targetPosition}px)`;
             
@@ -933,7 +893,7 @@
                 
                 userData.spinCount++;
                 
-                if (type === 'free' || type === 'stars') {
+                if (result.type === "stars" || type === "stars") {
                     userData.balance += result.value;
                     userData.totalWin += result.value;
                     alert(`🎉 Вы выиграли: ${result.name}!`);
@@ -942,57 +902,22 @@
                     userData.inventory.push({
                         name: result.name,
                         value: result.value,
-                        rarity: result.rarity,
                         supply: result.supply,
                         color: result.color,
                         wonAt: new Date().toLocaleDateString()
                     });
-                    alert(`🎉 Вы выиграли NFT: ${result.name} (${result.rarity})!\nВ наличии: ${result.supply} шт.`);
+                    alert(`🎉 Вы выиграли NFT: ${result.name}!\nЦена продажи: ${result.value} ⭐`);
                 }
                 
                 isSpinning = false;
                 spinBtn.disabled = false;
-                spinBtn.textContent = type === 'free' ? "КРУТИТЬ БЕСПЛАТНО" : `КРУТИТЬ - ${cost} ⭐`;
+                spinBtn.textContent = type === 'stars' ? "КРУТИТЬ - 10 ⭐" : "КРУТИТЬ - 50 ⭐";
                 
                 // СОХРАНЯЕМ ДАННЫЕ В SUPABASE
                 saveUserData();
                 updateUI();
                 
-            }, 10000); // 10 СЕКУНД
-        }
-        
-        // РЕАЛЬНЫЙ ТАЙМЕР
-        function startRealTimer(duration) {
-            if (freeSpinTimer) {
-                clearInterval(freeSpinTimer);
-            }
-            
-            let timeLeft = duration;
-            
-            freeSpinTimer = setInterval(() => {
-                if (userData.freeSpinAvailable) {
-                    clearInterval(freeSpinTimer);
-                    return;
-                }
-                
-                if (timeLeft <= 0) {
-                    clearInterval(freeSpinTimer);
-                    userData.freeSpinAvailable = true;
-                    userData.freeSpinTime = 0;
-                    document.getElementById('freeSpinText').textContent = "✨ Доступно сейчас!";
-                    document.getElementById('freeTimer').textContent = "00:00:00";
-                    saveUserData();
-                    return;
-                }
-                
-                timeLeft -= 1000;
-                const hours = Math.floor(timeLeft / 3600000);
-                const minutes = Math.floor((timeLeft % 3600000) / 60000);
-                const seconds = Math.floor((timeLeft % 60000) / 1000);
-                
-                document.getElementById('freeTimer').textContent = 
-                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            }, 1000);
+            }, 10000);
         }
 
         // ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ
