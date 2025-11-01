@@ -206,7 +206,6 @@
         }
         
         .roulette-item { 
-            width: 100px; 
             height: 100%; 
             display: flex; 
             flex-direction: column; 
@@ -214,9 +213,18 @@
             justify-content: center; 
             border-right: 1px solid #333; 
             font-weight: bold; 
-            font-size: 11px; 
             text-align: center; 
             padding: 5px; 
+        }
+        
+        .stars-item {
+            width: 150px; /* ШИРОКИЕ СЕКТОРА ДЛЯ ЗВЕЗД */
+            font-size: 14px;
+        }
+        
+        .nft-item {
+            width: 60px; /* УЗКИЕ СЕКТОРА ДЛЯ NFT */
+            font-size: 10px;
         }
         
         .center-line { 
@@ -832,33 +840,33 @@
             track.innerHTML = '';
             
             if (trackId === 'nftTrack') {
-                // ДЛЯ NFT РУЛЕТКИ - ЗВЕЗДЫ ПОВТОРЯЕМ ЧАЩЕ (80% места)
-                for (let copy = 0; copy < 8; copy++) {
+                // ДЛЯ NFT РУЛЕТКИ - ЗВЕЗДЫ: ШИРОКИЕ СЕКТОРА (80% визуально)
+                for (let copy = 0; copy < 12; copy++) {
                     // Добавляем только звездные призы много раз
                     const starPrizes = prizes.filter(p => p.type === "stars");
                     starPrizes.forEach((prize, index) => {
                         const item = document.createElement('div');
-                        item.className = 'roulette-item';
+                        item.className = 'roulette-item stars-item';
                         item.style.background = prize.color;
                         item.innerHTML = `<div>${prize.name}</div>`;
                         track.appendChild(item);
                     });
                 }
-                // NFT добавляем только 1 раз (20% места)
+                // NFT: УЗКИЕ СЕКТОРА (20% визуально)
                 const nftPrizes = prizes.filter(p => p.type === "nft");
                 nftPrizes.forEach((prize, index) => {
                     const item = document.createElement('div');
-                    item.className = 'roulette-item';
+                    item.className = 'roulette-item nft-item';
                     item.style.background = prize.color;
                     item.innerHTML = `<div>${prize.name}</div>`;
                     track.appendChild(item);
                 });
             } else {
-                // ДЛЯ ЗВЕЗДНОЙ РУЛЕТКИ - как обычно
+                // ДЛЯ ЗВЕЗДНОЙ РУЛЕТКИ - стандартные размеры
                 for (let copy = 0; copy < 5; copy++) {
                     prizes.forEach((prize, index) => {
                         const item = document.createElement('div');
-                        item.className = 'roulette-item';
+                        item.className = 'roulette-item stars-item';
                         item.style.background = prize.color;
                         item.innerHTML = `<div>${prize.name}</div>`;
                         track.appendChild(item);
@@ -906,9 +914,26 @@
             track.style.transform = 'translateX(0)';
             void track.offsetWidth;
             
-            const itemWidth = 100;
-            const targetIndex = Math.floor(Math.random() * prizes.length) + (prizes.length * 2);
-            const targetPosition = -(targetIndex * itemWidth) + (2 * itemWidth);
+            // РАСЧЕТ СМЕЩЕНИЯ С УЧЕТОМ РАЗНЫХ ШИРИН СЕКТОРОВ
+            let totalWidth = 0;
+            const trackItems = track.querySelectorAll('.roulette-item');
+            trackItems.forEach(item => {
+                totalWidth += item.offsetWidth;
+            });
+            
+            const targetIndex = Math.floor(Math.random() * prizes.length) + (prizes.length * 3);
+            
+            // РАСЧЕТ ПОЗИЦИИ С УЧЕТОМ РАЗНЫХ ШИРИН
+            let targetPosition = 0;
+            let currentIndex = 0;
+            
+            for (let i = 0; i < targetIndex; i++) {
+                const actualIndex = i % trackItems.length;
+                targetPosition -= trackItems[actualIndex].offsetWidth;
+            }
+            
+            // ДОБАВЛЯЕМ СМЕЩЕНИЕ ДЛЯ ЦЕНТРАЛЬНОЙ ЛИНИИ
+            targetPosition += (track.offsetWidth / 2);
             
             track.style.transition = 'transform 10s cubic-bezier(0.1, 0.2, 0.8, 0.9)';
             track.style.transform = `translateX(${targetPosition}px)`;
@@ -951,4 +976,4 @@
         initRoulettes();
     </script>
 </body>
-                        </html>
+</html>
