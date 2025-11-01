@@ -5,7 +5,7 @@ import os
 import time
 
 BOT_TOKEN = os.getenv('BOT_TOKEN', '8052679500:AAEobQqpYnUxbfATmWa1tBIN-LZClPOUCbw')
-WEB_APP_URL = "https://raw.githack.com/Abobyz83937e89464/tg-roulette-bot/main/web_app/index.html?v=5"
+WEB_APP_URL = "https://69053f208bc725c8931520a3--phenomenal-gaufre-218f69.netlify.app"
 def init_db():
     conn = sqlite3.connect('users.db')
     c = conn.cursor()
